@@ -1,12 +1,14 @@
-import { Button } from "@material-tailwind/react";
-function App() {
+import ScrollToTop from "./components/scoll-to-top/Main";
+import { BrowserRouter } from "react-router-dom";
+import Router from "./router";
 
+function App() {
   return (
-    <>
-      <h1 className="text-3xl font-bold underline text-center text-red-400">Hello world!</h1>
-      <Button>Button</Button>
-    </>
+      <BrowserRouter>
+        <Router />
+        <ScrollToTop />
+      </BrowserRouter>
   );
 }
 
-export default App
+export default App;
