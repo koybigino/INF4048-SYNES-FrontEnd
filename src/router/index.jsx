@@ -10,6 +10,7 @@ import ErrorPage from "../modules/error-page/error";
 import ForgotPassword from '../modules/auth/pages/forgot-password/Main';
 import ResetPassword from '../modules/auth/pages/reset-password/Main';
 import Goods from "../modules/goods/pages/Main";
+import Details from "../modules/goods/pages/details.tsx";
 
 function Router() {
   const routes = [
@@ -25,6 +26,10 @@ function Router() {
           path: "/goods",
           element: <Goods />,
         },
+        {
+          path: "/goods/details",
+          element: <Details />,
+        }
       ],
     },
     {
