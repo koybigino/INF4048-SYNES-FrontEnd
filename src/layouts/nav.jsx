@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 //import { Transition } from "react-transition-group";
 import { Outlet, useLocation, useNavigate, Link, NavLink } from "react-router-dom";
-// import Logo from '../assets/img/logo 1.png'
+import Logo from '../assets/img/logo.png'
 import {
   Navbar,
   MobileNav,
@@ -79,8 +79,8 @@ export default function Example() {
   );
 
   return (<>
-    <Navbar className={`mx-auto py-2 px-4 lg:px-8 lg:py-0 min-w-full rounded rounded-none border shadow border-0`}>
-      <div className="container mx-auto flex items-center justify-between text-blue-gray-900">
+    <Navbar className={`mx-auto py-2 px-4 lg:px-8 lg:py-0 min-w-full rounded shadow border-0`}>
+      <div className="container mx-auto flex items-center justify-between text-second py-2">
         <Typography
           as="a"
           href="#"
@@ -89,8 +89,7 @@ export default function Example() {
         >
           <Link to='/'
             className="mr-4 cursor-pointer font-normal flex items-center ">
-            {/* <img src={Logo} alt="" className="w-20" /> */}
-            <p className="font-bold text-[#3f6b75] text-lg">Synes</p>
+            <img src={Logo} alt="" className="w-20" />
           </Link>
         </Typography>
         <div className="hidden lg:block">{navList}</div>

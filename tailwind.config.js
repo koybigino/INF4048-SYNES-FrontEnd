@@ -12,8 +12,12 @@ module.exports = withMT({
       colors: {
         main: '#FDC886',
         second : '#f13e5c'
+      },
+    backgroundImage: {
+      'login': "url('/src/assets/img/login2.svg')",
       }
     },
+    //add background image
   },
   plugins: [],
 });

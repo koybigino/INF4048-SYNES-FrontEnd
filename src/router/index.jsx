@@ -9,9 +9,7 @@ import ErrorPage from "../modules/error-page/error";
 //
 import ForgotPassword from '../modules/auth/pages/forgot-password/Main';
 import ResetPassword from '../modules/auth/pages/reset-password/Main';
-// import Reseting from '../modules/auth/pages/reset-message/Main';
-// import Survey from "../modules/auth/pages/survey/survey";
-// import Profile from '../modules/me/pages/Main'
+import Goods from "../modules/goods/pages/Main";
 
 function Router() {
   const routes = [
@@ -22,12 +20,11 @@ function Router() {
         {
           path: "/",
           element:<Home />
-        //  <ProtectedRoute children={<Home />} />
         },
-        // {
-        //   path: "/me",
-        //   element: <Profile />,
-        // },
+        {
+          path: "/goods",
+          element: <Goods />,
+        },
       ],
     },
     {
