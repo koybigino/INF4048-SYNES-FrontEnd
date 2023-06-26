@@ -1,13 +1,17 @@
+
+  @import url('https://fonts.googleapis.com/css2?family=Belanosima:wght@400;600;700&family=Inter:wght@300;600&family=JetBrains+Mono:wght@100&family=Poppins:ital,wght@0,100;0,200;0,400;0,700;1,800&family=Roboto&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 *{
-    font-family: 'Poppins';
+    font-family : 'Poppins', sans-serif;
+    font-weight: 400;
 }
 body
 {
-    background-color: #f9f3f1a5;
+    background-color: #fdc78618;
 }
 
 textarea:focus, input:focus{
@@ -16,7 +20,7 @@ textarea:focus, input:focus{
 
 .active{
     font-weight: bolder;
-    color: #E67F1E;
+    color: #FDC886;
 }
 
 /* Hide scrollbar for Chrome, Safari and Opera */
