@@ -1,9 +1,8 @@
 import { useRoutes } from "react-router-dom";
 
-import Navbar from "../layouts/navbar";
+import Navbar from "../layouts/Navbar";
 import Login from "../modules/auth/pages/login/Main";
 import ErrorPage from "../modules/error-page/error";
-import Dashboard from "../modules/dashboard/pages/Dashboard";
 import User from "../modules/dashboard/pages/user/User";
 import Activity from "../modules/dashboard/pages/activite/Activity";
 import Finances from "../modules/dashboard/pages/finance/Finances";
