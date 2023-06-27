@@ -1,7 +1,7 @@
 import { useLocation } from "react-router-dom";
 import { useEffect } from "react";
 
-function Main(props) {
+function Main() {
   const location = useLocation();
 
   // Restore scroll position
