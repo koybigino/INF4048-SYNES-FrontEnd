@@ -12,7 +12,7 @@ import {
 import { useRecoilValue } from "recoil";
 import { storeToken } from "../../stores/storeAtoms";
 import { HashLink } from "react-router-hash-link";
-import Profile from "../profile/Profile";
+import Profile from "../profile/ProfileIcon";
 import NotificationBadge from "../badge/NotificationBadge";
 
 export default function NavSamePage() {
@@ -29,6 +29,20 @@ export default function NavSamePage() {
 
   const navList = (
     <ul className="mb-4 mt-2 flex flex-col lg:mb-0 lg:mt-0 lg:flex-row lg:items-center">
+    <Typography
+      as="li"
+      variant="small"
+      color="blue-gray"
+      className="p-1 font-normal"
+    >
+      <HashLink
+        to="#activites"
+        activeClassName="active"
+        className="flex items-center transition duration-300 easy-in-out hover:text-aim sm:ml-12"
+      >
+        Activités
+      </HashLink>
+    </Typography>
       <Typography
         as="li"
         variant="small"
@@ -36,25 +50,11 @@ export default function NavSamePage() {
         className="p-1 font-normal"
       >
         <HashLink
-          to="#users"
+          to="#biens"
           className="flex items-center transition duration-300 easy-in-out hover:text-aim sm:ml-12"
           activeClassName="active"
         >
-          Users
-        </HashLink>
-      </Typography>
-      <Typography
-        as="li"
-        variant="small"
-        color="blue-gray"
-        className="p-1 font-normal"
-      >
-        <HashLink
-          to="#finances"
-          className="flex items-center transition duration-300 easy-in-out hover:text-aim sm:ml-12"
-          activeClassName="active"
-        >
-          Finances
+          biens
         </HashLink>
       </Typography>
       <Typography
@@ -92,11 +92,11 @@ export default function NavSamePage() {
         className="p-1 font-normal"
       >
         <HashLink
-          to="#traçabilite"
+          to="#cotisations"
           activeClassName="active"
           className="flex items-center transition duration-300 easy-in-out hover:text-aim sm:ml-12"
         >
-          Traçabilité
+          Cotisation
         </HashLink>
       </Typography>
       <Typography
@@ -106,25 +106,11 @@ export default function NavSamePage() {
         className="p-1 font-normal"
       >
         <HashLink
-          to="#droits"
-          activeClassName="active"
+          to="#partenaires"
           className="flex items-center transition duration-300 easy-in-out hover:text-aim sm:ml-12"
-        >
-          Droits
-        </HashLink>
-      </Typography>
-      <Typography
-        as="li"
-        variant="small"
-        color="blue-gray"
-        className="p-1 font-normal"
-      >
-        <HashLink
-          to="#activites"
           activeClassName="active"
-          className="flex items-center transition duration-300 easy-in-out hover:text-aim sm:ml-12"
         >
-          Activités
+          Partenaires
         </HashLink>
       </Typography>
     </ul>

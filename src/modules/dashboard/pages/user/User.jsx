@@ -1,11 +1,17 @@
-import React from 'react'
+import React from "react";
+import DashboardHeader from "../../../../components/dashboardheader/DashboardHeader";
+import CreateUser from "../../../../components/createuser/CreateUser";
+import UserList from "../../../../components/userlist/UserList";
+import Container from "../../../../components/container/Container";
 
 function User() {
   return (
-    <div>
-        User
-    </div>
-  )
+    <Container>
+      <div className="flex items-center my-10 justify-center">
+        <UserList />
+      </div>
+    </Container>
+  );
 }
 
-export default User
+export default User;

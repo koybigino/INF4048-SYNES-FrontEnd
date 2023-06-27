@@ -1,8 +1,14 @@
 import React from 'react'
+import DashboardHeader from '../../../../components/dashboardheader/DashboardHeader'
 
 function Activity() {
   return (
-    <div>Activity</div>
+    <>
+      <DashboardHeader title="Gestion des activités">
+        Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam,
+        voluptatum.
+      </DashboardHeader>
+    </>
   )
 }
 

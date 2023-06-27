@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import Profile from "../profile/Profile";
+import Profile from "../profile/ProfileIcon";
 import { Outlet, Link, NavLink } from "react-router-dom";
 // import Logo from '../assets/img/logo 1.png'
 import {

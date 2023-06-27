@@ -13,6 +13,7 @@ import Traçability from "../modules/dashboard/pages/traçabilite/Traçability";
 import Section from "../modules/dashboard/pages/section/Section";
 import Goods from "../modules/goods/pages/Main";
 import Details from "../modules/goods/pages/details.tsx";
+import Profile from "../modules/dashboard/pages/profile/Profile";
 
 function Router() {
   const routes = [
@@ -21,38 +22,36 @@ function Router() {
       element: <Navbar />,
       children: [
         {
-          path: "/dashboard/",
-          element: <Dashboard />,
-          children: [
-            {
-              path: "/dashboard/users",
-              element: <User />,
-            },
-            {
-              path: "/dashboard/droits",
-              element: <Droit />,
-            },
-            {
-              path: "/dashboard/finances",
-              element: <Finances />,
-            },
-            {
-              path: "/dashboard/activites",
-              element: <Activity />,
-            },
-            {
-              path: "/dashboard/sanctions",
-              element: <Sanction />,
-            },
-            {
-              path: "/dashboard/sections",
-              element: <Section />,
-            },
-            {
-              path: "/dashboard/traçabilites",
-              element: <Traçability />,
-            },
-          ],
+          path: "/dashboard/users",
+          element: <User />,
+        },
+        {
+          path: "/dashboard/profile",
+          element: <Profile />,
+        },
+        {
+          path: "/dashboard/droits",
+          element: <Droit />,
+        },
+        {
+          path: "/dashboard/finances",
+          element: <Finances />,
+        },
+        {
+          path: "/dashboard/activites",
+          element: <Activity />,
+        },
+        {
+          path: "/dashboard/sanctions",
+          element: <Sanction />,
+        },
+        {
+          path: "/dashboard/sections",
+          element: <Section />,
+        },
+        {
+          path: "/dashboard/traçabilites",
+          element: <Traçability />,
         },
         {
           path: "/goods",
@@ -61,7 +60,7 @@ function Router() {
         {
           path: "/goods/details",
           element: <Details />,
-        }
+        },
       ],
     },
     {
