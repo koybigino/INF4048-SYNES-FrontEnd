@@ -11,6 +11,8 @@ import Droit from "../modules/dashboard/pages/droit/Droit";
 import Sanction from "../modules/dashboard/pages/sanction/Sanction";
 import Traçability from "../modules/dashboard/pages/traçabilite/Traçability";
 import Section from "../modules/dashboard/pages/section/Section";
+import Goods from "../modules/goods/pages/Main";
+import Details from "../modules/goods/pages/details.tsx";
 
 function Router() {
   const routes = [
@@ -52,6 +54,14 @@ function Router() {
             },
           ],
         },
+        {
+          path: "/goods",
+          element: <Goods />,
+        },
+        {
+          path: "/goods/details",
+          element: <Details />,
+        }
       ],
     },
     {

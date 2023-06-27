@@ -14,6 +14,10 @@ module.exports = withMT({
         second : '#f13e5c'
       },
     },
+    backgroundImage: {
+      'login': "url('/src/assets/img/login2.svg')",
+      'banner': "url('/src/assets/img/banner.jpg')",
+      }
   },
   plugins: [],
 });

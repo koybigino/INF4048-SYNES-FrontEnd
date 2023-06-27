@@ -13,6 +13,7 @@ import { useRecoilValue } from "recoil";
 import { storeToken } from "../../stores/storeAtoms";
 import { HashLink } from "react-router-hash-link";
 import Profile from "../profile/Profile";
+import NotificationBadge from "../badge/NotificationBadge";
 
 export default function NavSamePage() {
   const [openNav, setOpenNav] = useState(false);
