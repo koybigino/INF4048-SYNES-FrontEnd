@@ -1,8 +1,4 @@
-import {
-  MagnifyingGlassIcon,
-  ChevronUpDownIcon,
-} from "@heroicons/react/24/outline";
-import { PencilIcon, UserPlusIcon, TrashIcon } from "@heroicons/react/24/solid";
+import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import {
   Card,
   CardHeader,
@@ -10,13 +6,8 @@ import {
   Typography,
   Button,
   CardBody,
-  Chip,
   CardFooter,
-  Tabs,
-  TabsHeader,
-  Tab,
   Avatar,
-  IconButton,
   Tooltip,
 } from "@material-tailwind/react";
 import CreateUser from "../createuser/CreateUser";
@@ -26,7 +17,9 @@ import ConfirmDelete from "../confirm/ConfirmDelete";
 import { Link } from "react-router-dom";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { storeAllUser, storeHeadTableUsers } from "../../stores/storeAtoms";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import Alert from "../alert/Alert";
+import { ExclamationTriangleIcon, CheckCircleIcon } from "@heroicons/react/24/solid";
 
 export default function UserList() {
   const TABLE_HEAD = useRecoilValue(storeHeadTableUsers);
@@ -34,6 +27,12 @@ export default function UserList() {
   const [allUsers, setAllUsers] = useRecoilState(storeAllUser);
 
   const [TABLE_ROWS, setTableRows] = useState(allUsers);
+  const [showAlertSucess, setShowAlertSucess] = useState(false);
+  const [showAlertDanger, setShowAlertDanger] = useState(false);
+
+  useEffect(() => {
+    setTableRows(allUsers);
+  }, [allUsers]);
 
   const handleChange = (e) => {
     e.preventDefault();
@@ -60,6 +59,24 @@ export default function UserList() {
             <Typography color="gray" className="mt-1 font-normal">
               Voir les informations sur les différents membres
             </Typography>
+            <div className="mx-10 mb-2">
+              <Alert
+                color="red"
+                icon={<ExclamationTriangleIcon className="h-6 w-6" />}
+                open={showAlertDanger}
+                setOpen={setShowAlertDanger}
+              >
+                Erreur lors de la supression du membre !
+              </Alert>
+              <Alert
+                color="green"
+                icon={<CheckCircleIcon className="mt-px h-6 w-6" />}
+                open={showAlertSucess}
+                setOpen={setShowAlertSucess}
+              >
+                Suppression du membre réussit !
+              </Alert>
+            </div>
           </div>
           <div className="flex shrink-0 flex-col gap-2 sm:flex-row">
             <CreateUser />
@@ -114,6 +131,8 @@ export default function UserList() {
                   phone_number,
                   photo,
                   date_creation,
+                  etablissement,
+                  id,
                 },
                 index
               ) => {
@@ -222,6 +241,13 @@ export default function UserList() {
                             color="blue-gray"
                             className="font-normal opacity-70"
                           >
+                            Etablissement : {etablissement}
+                          </Typography>
+                          <Typography
+                            variant="small"
+                            color="blue-gray"
+                            className="font-normal opacity-70"
+                          >
                             Spécialité : {specialite}
                           </Typography>
                         </div>
@@ -240,12 +266,34 @@ export default function UserList() {
                     </td>
                     <td className={classes}>
                       <Tooltip content="Modifier">
-                        <EditUser />
+                        <EditUser
+                          user={{
+                            nom,
+                            adresse_mail,
+                            age,
+                            matricule,
+                            section,
+                            nationalite,
+                            role,
+                            sexe,
+                            specialite,
+                            phone_number,
+                            photo,
+                            date_creation,
+                            etablissement,
+                            id,
+                          }}
+                        />
                       </Tooltip>
                     </td>
                     <td className={classes}>
                       <Tooltip content="Supprimer">
-                        <ConfirmDelete />
+                        <ConfirmDelete
+                          nom={nom}
+                          id={id}
+                          setShowAlertSucess={setShowAlertSucess}
+                          setShowAlertDanger={setShowAlertDanger}
+                        />
                       </Tooltip>
                     </td>
                   </tr>

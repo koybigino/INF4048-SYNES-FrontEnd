@@ -2,10 +2,11 @@ import { Option, Select } from '@material-tailwind/react';
 import React, { useEffect, useState } from 'react'
 import { useRecoilValue } from 'recoil';
 import { storeAllUser } from '../../stores/storeAtoms';
+import { storeSection } from '../../stores/storeSelector';
 
 function UserFilter({setTableRows}) {
     const allUsers = useRecoilValue(storeAllUser);
-        const [sections, setSections] = useState([]);
+        const sections = useRecoilValue(storeSection);
 
     const handleChange = (e) => {
 
@@ -23,17 +24,6 @@ function UserFilter({setTableRows}) {
 
         setTableRows(filterUser)
     }
-
-    useEffect(() => {
-        let secs = ["All"]
-        allUsers.filter((user) => {
-        if(!secs.includes(user.section.nom)){
-            secs.push(user.section.nom);
-        }
-       })
-
-        setSections(secs);
-    }, [allUsers])
 
     
   return (

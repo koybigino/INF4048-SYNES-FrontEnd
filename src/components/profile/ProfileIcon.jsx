@@ -18,6 +18,8 @@ import {
   Avatar,
 } from "@material-tailwind/react";
 import { Link } from "react-router-dom";
+import { useRecoilState } from "recoil";
+import { storeUser } from "../../stores/storeAtoms";
 
 const profileMenuItems = [
   {
@@ -28,7 +30,7 @@ const profileMenuItems = [
   {
     label: "Edit Profile",
     icon: Cog6ToothIcon,
-    to: "/",
+    to: "/edit-profile",
   },
   {
     label: "Dashboard",
@@ -44,6 +46,7 @@ const profileMenuItems = [
 function Profile() {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
   const closeMenu = () => setIsMenuOpen(false);
+  const [currentUser, setCurrentuser] = useRecoilState(storeUser);
 
   return (
     <Menu open={isMenuOpen} handler={setIsMenuOpen} placement="bottom-end">
@@ -58,7 +61,7 @@ function Profile() {
             size="sm"
             alt="candice wu"
             className="border border-main p-0.5"
-            src="https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1480&q=80"
+            src={currentUser.photo.image_link}
           />
           <ChevronDownIcon
             strokeWidth={2.5}

@@ -13,6 +13,7 @@ import Section from "../modules/dashboard/pages/section/Section";
 import Goods from "../modules/goods/pages/Main";
 import Details from "../modules/goods/pages/details.tsx";
 import Profile from "../modules/dashboard/pages/profile/Profile";
+import EditProfile from "../components/editProfil/EditProfile";
 
 function Router() {
   const routes = [
@@ -27,6 +28,10 @@ function Router() {
         {
           path: "/dashboard/profile",
           element: <Profile />,
+        },
+        {
+          path: "/edit-profile",
+          element: <EditProfile />,
         },
         {
           path: "/dashboard/droits",
