@@ -22,7 +22,4 @@ axiosInstance.interceptors.response.use(
 
 export default axiosInstance.create({
   baseURL: "https://synes-backend.onrender.com/",
-  headers: {
-    'Content-Type': 'application/json',
-  }
 });

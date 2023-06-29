@@ -1,12 +1,9 @@
 import { Option, Select } from '@material-tailwind/react';
-import React, { useEffect, useState } from 'react'
 import { useRecoilValue } from 'recoil';
-import { storeAllUser } from '../../stores/storeAtoms';
-import { storeSection } from '../../stores/storeSelector';
+import { storeSections } from '../../stores/storeSelector';
 
-function UserFilter({setTableRows}) {
-    const allUsers = useRecoilValue(storeAllUser);
-        const sections = useRecoilValue(storeSection);
+function UserFilter({setTableRows, allUsers}) {
+    const sections = useRecoilValue(storeSections);
 
     const handleChange = (e) => {
 

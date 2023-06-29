@@ -1,15 +1,15 @@
-import React from 'react'
-import DashboardHeader from '../../../../components/dashboardheader/DashboardHeader'
+import React from "react";
+import SectionList from "../../../../components/sectionlist/SectionList";
+import Container from "../../../../components/container/Container";
 
 function Section() {
   return (
-    <>
-      <DashboardHeader title="Gestion des sections">
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam,
-        voluptatum.
-      </DashboardHeader>
-    </>
-  )
+    <Container>
+      <div className="flex items-center my-10 justify-center">
+        <SectionList />
+      </div>
+    </Container>
+  );
 }
 
-export default Section
+export default Section;

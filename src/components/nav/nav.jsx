@@ -13,7 +13,7 @@ import { useRecoilValue } from "recoil";
 import { storeToken } from "../../stores/storeAtoms";
 import NotificationBadge from "../badge/NotificationBadge";
 
-export default function Nav() {
+export default function Nav({user}) {
   const [openNav, setOpenNav] = useState(false);
   const [transparent, setTransparent] = useState(true);
   const token = useRecoilValue(storeToken);
@@ -140,13 +140,15 @@ export default function Nav() {
           {token ? (
             <>
               {" "}
-              <Profile />
+              <Profile user={user} />
               <NotificationBadge />{" "}
             </>
           ) : (
-            <Button color="orange" className="rounded-full w-fit">
-              Log in
-            </Button>
+            <Link to="/login">
+              <Button color="orange" className="rounded-full w-fit">
+                Log in
+              </Button>
+            </Link>
           )}
           <IconButton
             variant="text"

@@ -1,9 +1,4 @@
-import {
-  Card,
-  IconButton,
-  Input,
-  Typography,
-} from "@material-tailwind/react";
+import { Card, IconButton, Input, Typography } from "@material-tailwind/react";
 
 import { Fragment, useState } from "react";
 import {
@@ -14,49 +9,49 @@ import {
 } from "@material-tailwind/react";
 import { PencilIcon } from "@heroicons/react/24/outline";
 import { useRecoilState, useRecoilValue } from "recoil";
-import { storeEtablissements } from "../../stores/storeSelector";
+import { storeEtablissements, storeGetAllSection } from "../../stores/storeSelector";
 import Select from "../select/Select";
-import { storeAllUser } from "../../stores/storeAtoms";
-import { ExclamationTriangleIcon, CheckCircleIcon } from "@heroicons/react/24/solid";
+import {
+  ExclamationTriangleIcon,
+  CheckCircleIcon,
+} from "@heroicons/react/24/solid";
 import Alert from "../alert/Alert";
 
-export default function EditUser({ user }) {
+export default function EditSection({ section }) {
   const etablissements = useRecoilValue(storeEtablissements);
-  const [allUser, setAllUsers] = useRecoilState(storeAllUser);
+  const [allsection, setAllsections] = useRecoilState(storeGetAllSection);
 
   const [open, setOpen] = useState(false);
 
   const handleOpen = () => setOpen(!open);
 
-  const [nom, setNom] = useState(user.nom);
-  const [adresse_mail, setEmail] = useState(user.adresse_mail);
-  const [matricule, setMatricule] = useState(user.matricule);
-  const [etablissement, setEtablissement] = useState(user.etablissement);
+  const [nom, setNom] = useState(section.nom);
+  const [etablissement, setEtablissement] = useState(section.etablissement);
   const [showAlertSucess, setShowAlertSucess] = useState(false);
   const [showAlertDanger, setShowAlertDanger] = useState(false);
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    let users = allUser.filter((u) => {
-      if(user.id != u.id){
+    let sections = allsection.filter((u) => {
+      if (section.id != u.id) {
         return u;
       }
     });
 
-    setAllUsers(users);
+    setAllsections(sections);
 
-    users = [
-      ...users,
-      { ...user, nom, adresse_mail, matricule, etablissement },
+    sections = [
+      ...sections,
+      { ...section, nom, adresse_mail, matricule, etablissement },
     ];
 
-    setAllUsers(users);
+    setAllsections(sections);
 
-    setShowAlertSucess(true)
+    setShowAlertSucess(true);
 
     setTimeout(() => {
-      setShowAlertSucess(false)
+      setShowAlertSucess(false);
     }, 5000);
   };
 
@@ -68,16 +63,26 @@ export default function EditUser({ user }) {
       <Dialog open={open} handler={handleOpen}>
         <DialogHeader>
           <Typography variant="h4" color="blue-gray">
-            Modifier le membre {user.nom}
+            Modifier la section {section.nom}
           </Typography>
         </DialogHeader>
         <div className="mx-10 mb-2">
-        <Alert color="red" icon={<ExclamationTriangleIcon className="h-6 w-6" />} open={showAlertDanger} setOpen={setShowAlertDanger}>
-          Erreur lors de la modification des informations du membre !
-        </Alert>
-        <Alert color="green" icon={<CheckCircleIcon className="mt-px h-6 w-6" />} open={showAlertSucess} setOpen={setShowAlertSucess}>
-          Modification des informations du membre réussit !
-        </Alert>
+          <Alert
+            color="red"
+            icon={<ExclamationTriangleIcon className="h-6 w-6" />}
+            open={showAlertDanger}
+            setOpen={setShowAlertDanger}
+          >
+            Erreur lors de la modification des informations du membre !
+          </Alert>
+          <Alert
+            color="green"
+            icon={<CheckCircleIcon className="mt-px h-6 w-6" />}
+            open={showAlertSucess}
+            setOpen={setShowAlertSucess}
+          >
+            Modification des informations du membre réussit !
+          </Alert>
         </div>
         <DialogBody className="flex items-center justify-center" divider>
           <Card color="transparent" shadow={false}>
@@ -95,20 +100,6 @@ export default function EditUser({ user }) {
                   color="orange"
                   size="lg"
                   label="Nom"
-                />
-                <Input
-                  onChange={(e) => setEmail(e.target.value)}
-                  value={adresse_mail}
-                  color="orange"
-                  size="lg"
-                  label="Email"
-                />
-                <Input
-                  onChange={(e) => setMatricule(e.target.value)}
-                  value={matricule}
-                  color="orange"
-                  size="lg"
-                  label="Maticule"
                 />
                 <Select
                   onSelectChange={setEtablissement}

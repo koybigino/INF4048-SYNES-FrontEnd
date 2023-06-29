@@ -14,12 +14,14 @@ import Goods from "../modules/goods/pages/Main";
 import Details from "../modules/goods/pages/details.tsx";
 import Profile from "../modules/dashboard/pages/profile/Profile";
 import EditProfile from "../components/editProfil/EditProfile";
+import ProtectedRoute from "../navigation/GuardedRoute";
+import AuthRoute from "../navigation/AuthRoute";
 
 function Router() {
   const routes = [
     {
       path: "/",
-      element: <Navbar />,
+      element: <ProtectedRoute><Navbar /></ProtectedRoute>,
       children: [
         {
           path: "/dashboard/users",
@@ -30,7 +32,7 @@ function Router() {
           element: <Profile />,
         },
         {
-          path: "/edit-profile",
+          path: "/dashboard/edit-profile",
           element: <EditProfile />,
         },
         {
@@ -69,7 +71,7 @@ function Router() {
     },
     {
       path: "/login",
-      element: <Login />,
+      element: <AuthRoute redirectPath="/dashboard/users"><Login /></AuthRoute>,
     },
     {
       path: "*",

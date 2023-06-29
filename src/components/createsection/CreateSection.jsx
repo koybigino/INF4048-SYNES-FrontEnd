@@ -30,7 +30,7 @@ import Alert from "../alert/Alert";
 import { storeEtablissements } from "../../stores/storeSelector";
 import axios from "../../config/axios";
 
-export default function CreateUser({ setTableRows, allUsers }) {
+export default function CreateSection({ setTableRows, allSections }) {
   const etablissements = useRecoilValue(storeEtablissements);
 
   const [nom, setNom] = useState("");
@@ -63,7 +63,7 @@ export default function CreateUser({ setTableRows, allUsers }) {
 
     setLoading(true);
 
-    let users = allUsers;
+    let users = allSections;
 
     const user = {
       matricule: "KDK392",
@@ -86,8 +86,6 @@ export default function CreateUser({ setTableRows, allUsers }) {
       ...users,
       { ...user, nom, adresse_mail, matricule, etablissement },
     ];
-
-    
 
     if (etablissement) {
       axios
@@ -127,7 +125,7 @@ export default function CreateUser({ setTableRows, allUsers }) {
             setShowAlertDanger(false);
           }, 5000);
         });
-    }else{
+    } else {
       setLoading(false);
       setShowAlertDanger(true);
 
@@ -198,56 +196,13 @@ export default function CreateUser({ setTableRows, allUsers }) {
                   required
                 />
                 <Input
-                  onChange={(e) => setEmail(e.target.value)}
-                  value={adresse_mail}
+                  onChange={(e) => setEtablissement(e.target.value)}
+                  value={etablissement}
                   color="orange"
                   size="lg"
-                  label="Email"
-                  type="email"
+                  label="Etablissement"
                   required
                 />
-                <Input
-                  onChange={(e) => setMatricule(e.target.value)}
-                  value={matricule}
-                  color="orange"
-                  size="lg"
-                  label="Maticule"
-                  required
-                />
-                {showRadio && (
-                  <div className="flex justify-around">
-                    <Radio
-                      onClick={handleAdd}
-                      id="add"
-                      name="type"
-                      label="Ajouter un Nouvel Etablissement"
-                    />
-                    <Radio
-                      onClick={handleSelect}
-                      id="select"
-                      name="type"
-                      label="Selectionner un Etablissement"
-                    />
-                  </div>
-                )}
-
-                {add && (
-                  <Input
-                    onChange={(e) => setEtablissement(e.target.value)}
-                    value={etablissement}
-                    color="orange"
-                    size="lg"
-                    label="Etablissement"
-                    required
-                  />
-                )}
-
-                {select && (
-                  <Select
-                    onSelectChange={setEtablissement}
-                    options={etablissements}
-                  />
-                )}
               </div>
               <Button
                 type="submit"

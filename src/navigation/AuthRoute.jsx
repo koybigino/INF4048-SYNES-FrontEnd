@@ -1,9 +1,18 @@
-import { Navigate } from "react-router-dom";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 const AuthRoute = ({ redirectPath = "/", children }) => {
-  if (localStorage.getItem("token")) {
-    return <Navigate to={redirectPath} replace />;
+  const navigate = useNavigate();
+
+  if (localStorage.getItem("userToken")) {
+    navigate(redirectPath);
   }
+
+  useEffect(() => {
+    if (localStorage.getItem("userToken")) {
+      navigate(redirectPath);
+    }
+  })
 
   return children;
 };

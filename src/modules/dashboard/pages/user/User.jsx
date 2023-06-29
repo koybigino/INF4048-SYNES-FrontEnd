@@ -1,6 +1,4 @@
 import React from "react";
-import DashboardHeader from "../../../../components/dashboardheader/DashboardHeader";
-import CreateUser from "../../../../components/createuser/CreateUser";
 import UserList from "../../../../components/userlist/UserList";
 import Container from "../../../../components/container/Container";
 

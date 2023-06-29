@@ -14,7 +14,7 @@ import { ClockIcon } from "@heroicons/react/24/outline";
 function NotificationBadge() {
   return (
     <div className="block">
-      <Badge content="5" className="">
+      <Badge overlap="" content="5" className="">
         <IconButton color="orange" className="w-7 h-7">
           <Menu>
             <MenuHandler>

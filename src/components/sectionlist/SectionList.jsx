@@ -19,30 +19,32 @@ import EditUser from "../edituser/EditUser";
 import ConfirmDelete from "../confirm/ConfirmDelete";
 import { Link } from "react-router-dom";
 import { useRecoilState, useRecoilValue } from "recoil";
-import { storeAllUser, storeHeadTableUsers } from "../../stores/storeAtoms";
+import { storeAllUser, storeHeadTableSections, storeHeadTableUsers } from "../../stores/storeAtoms";
 import {
   ExclamationTriangleIcon,
   CheckCircleIcon,
 } from "@heroicons/react/24/solid";
 import { useEffect, useState } from "react";
-import { storeGetAllUser } from "../../stores/storeSelector";
+import { storeGetAllSection } from "../../stores/storeSelector";
+import EditSection from "../editsection/EditSection";
+import CreateSection from "../createsection/CreateSection";
 
-export default function UserList() {
-  const TABLE_HEAD = useRecoilValue(storeHeadTableUsers);
-  const getUsers = useRecoilValue(storeGetAllUser);
+export default function SectionList() {
+  const TABLE_HEAD = useRecoilValue(storeHeadTableSections);
+  const getSections = useRecoilValue(storeGetAllSection);
 
-  const [TABLE_ROWS, setTableRows] = useState(getUsers);
+  const [TABLE_ROWS, setTableRows] = useState(getSections);
   const [showAlertSucess, setShowAlertSucess] = useState(false);
   const [showAlertDanger, setShowAlertDanger] = useState(false);
 
   const handleChange = (e) => {
     e.preventDefault();
 
-    const searchUser = getUsers.filter((user) => {
+    const searchSections = getSections.filter((user) => {
       if (user.nom.includes(e.target.value)) return user;
     });
 
-    setTableRows(searchUser);
+    setTableRows(searchSections);
   };
 
   return (
@@ -56,10 +58,10 @@ export default function UserList() {
           <div className="mb-8 flex items-center justify-between gap-8">
             <div>
               <Typography variant="h5" color="blue-gray">
-                Liste des Membres
+                Liste des Sections
               </Typography>
               <Typography color="gray" className="mt-1 font-normal">
-                Voir les informations sur les différents membres
+                Voir les informations sur les différents Sections
               </Typography>
               <div className="mx-10 mb-2">
                 <Alert
@@ -68,7 +70,7 @@ export default function UserList() {
                   open={showAlertDanger}
                   setOpen={setShowAlertDanger}
                 >
-                  Erreur lors de la supression du membre !
+                  Erreur lors de la supression du Section !
                 </Alert>
                 <Alert
                   color="green"
@@ -76,18 +78,18 @@ export default function UserList() {
                   open={showAlertSucess}
                   setOpen={setShowAlertSucess}
                 >
-                  Suppression du membre réussit !
+                  Suppression du Section réussit !
                 </Alert>
               </div>
             </div>
             <div className="flex shrink-0 flex-col gap-2 sm:flex-row">
-              <CreateUser allUsers={TABLE_ROWS} setTableRows={setTableRows} />
+              <CreateSection allSections={TABLE_ROWS} setTableRows={setTableRows} />
             </div>
           </div>
         </CardHeader>
 
         <div className="flex flex-col items-center justify-between mx-5 gap-4 md:flex-row">
-          <UserFilter allUsers={TABLE_ROWS} setTableRows={setTableRows} />
+          <UserFilter allSections={TABLE_ROWS} setTableRows={setTableRows} />
           <div className="w-full md:w-72">
             <Input
               onChange={handleChange}
@@ -124,16 +126,6 @@ export default function UserList() {
                   (
                     {
                       nom,
-                      adresse_mail,
-                      age,
-                      matricule,
-                      section,
-                      nationalite,
-                      role,
-                      sexe,
-                      specialite,
-                      phone_number,
-                      photo,
                       date_creation,
                       etablissement,
                       id,
@@ -150,19 +142,6 @@ export default function UserList() {
                         <td className={classes}>
                           <Link to="/">
                             <div className="flex items-center gap-3">
-                              <Avatar
-                                variant="circular"
-                                size="sm"
-                                alt="candice wu"
-                                className="border border-main p-0.5"
-                                src={
-                                  photo
-                                    ? photo.image_link
-                                      ? photo.image_link
-                                      : account
-                                    : account
-                                }
-                              />
                               <div className="flex flex-col">
                                 <Typography
                                   variant="small"
@@ -170,27 +149,6 @@ export default function UserList() {
                                   className="font-normal"
                                 >
                                   Nom : {nom}
-                                </Typography>
-                                <Typography
-                                  variant="small"
-                                  color="blue-gray"
-                                  className="font-normal opacity-70"
-                                >
-                                  Email : {adresse_mail}
-                                </Typography>
-                                <Typography
-                                  variant="small"
-                                  color="blue-gray"
-                                  className="font-normal opacity-70"
-                                >
-                                  Tel : {phone_number}
-                                </Typography>
-                                <Typography
-                                  variant="small"
-                                  color="blue-gray"
-                                  className="font-normal opacity-70"
-                                >
-                                  Matricule : {matricule}
                                 </Typography>
                                 <Typography
                                   variant="small"
@@ -205,67 +163,13 @@ export default function UserList() {
                         </td>
                         <td className={classes}>
                           <Link to="/">
-                            <div className="flex flex-col">
-                              <Typography
-                                variant="small"
-                                color="blue-gray"
-                                className="font-normal"
-                              >
-                                Nationalité : {nationalite}
-                              </Typography>
-                              <Typography
-                                variant="small"
-                                color="blue-gray"
-                                className="font-normal opacity-70"
-                              >
-                                Sexe : {sexe}
-                              </Typography>
-                              <Typography
-                                variant="small"
-                                color="blue-gray"
-                                className="font-normal opacity-70"
-                              >
-                                Age : {age}
-                              </Typography>
-                            </div>
-                          </Link>
-                        </td>
-                        <td className={classes}>
-                          <Link to="/">
-                            <div className="flex flex-col">
-                              <Typography
-                                variant="small"
-                                color="blue-gray"
-                                className="font-normal"
-                              >
-                                {role}
-                              </Typography>
-                            </div>
-                          </Link>
-                        </td>
-                        <td className={classes}>
-                          <Link to="/">
                             <div className="w-max">
-                              <Typography
-                                variant="small"
-                                color="blue-gray"
-                                className="font-normal"
-                              >
-                                Section : {section.nom}
-                              </Typography>
                               <Typography
                                 variant="small"
                                 color="blue-gray"
                                 className="font-normal opacity-70"
                               >
                                 Etablissement : {etablissement}
-                              </Typography>
-                              <Typography
-                                variant="small"
-                                color="blue-gray"
-                                className="font-normal opacity-70"
-                              >
-                                Spécialité : {specialite}
                               </Typography>
                             </div>
                           </Link>
@@ -283,20 +187,9 @@ export default function UserList() {
                         </td>
                         <td className={classes}>
                           <Tooltip content="Modifier">
-                            <EditUser
-                              user={{
+                            <EditSection
+                              section={{
                                 nom,
-                                adresse_mail,
-                                age,
-                                matricule,
-                                section,
-                                nationalite,
-                                role,
-                                sexe,
-                                specialite,
-                                phone_number,
-                                photo,
-                                date_creation,
                                 etablissement,
                                 id,
                               }}
@@ -311,9 +204,9 @@ export default function UserList() {
                               id={id}
                               setShowAlertSucess={setShowAlertSucess}
                               setShowAlertDanger={setShowAlertDanger}
-                              setAllUsers={setTableRows}
+                              setallSections={setTableRows}
                             >
-                              Voulez vous supprimer le membre
+                              Voulez vous supprimer la section {nom}
                             </ConfirmDelete>
                           </Tooltip>
                         </td>

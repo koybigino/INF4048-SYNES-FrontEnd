@@ -7,6 +7,7 @@ import {
   PowerIcon,
   PresentationChartBarIcon,
 } from "@heroicons/react/24/outline";
+import account from "../../assets/img/account.png";
 
 import {
   Typography,
@@ -17,9 +18,9 @@ import {
   MenuItem,
   Avatar,
 } from "@material-tailwind/react";
-import { Link } from "react-router-dom";
-import { useRecoilState } from "recoil";
-import { storeUser } from "../../stores/storeAtoms";
+import { Link, useNavigate } from "react-router-dom";
+import { useRecoilState, useSetRecoilState } from "recoil";
+import { storeToken, storeTokenType, storeUser } from "../../stores/storeAtoms";
 
 const profileMenuItems = [
   {
@@ -30,7 +31,7 @@ const profileMenuItems = [
   {
     label: "Edit Profile",
     icon: Cog6ToothIcon,
-    to: "/edit-profile",
+    to: "/dashboard/edit-profile",
   },
   {
     label: "Dashboard",
@@ -43,10 +44,21 @@ const profileMenuItems = [
   },
 ];
 
-function Profile() {
+function Profile({user}) {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
   const closeMenu = () => setIsMenuOpen(false);
-  const [currentUser, setCurrentuser] = useRecoilState(storeUser);
+  const navigate = useNavigate();
+  const setToken = useSetRecoilState(storeToken);
+  const setTokenType = useSetRecoilState(storeTokenType);
+
+  const logout = () => {
+    closeMenu();
+
+    setToken("");
+    setTokenType("");
+    localStorage.clear();
+    navigate('/login')
+  };
 
   return (
     <Menu open={isMenuOpen} handler={setIsMenuOpen} placement="bottom-end">
@@ -61,7 +73,7 @@ function Profile() {
             size="sm"
             alt="candice wu"
             className="border border-main p-0.5"
-            src={currentUser.photo.image_link}
+            src={user.photo.image_link ? user.photo.image_link : account}
           />
           <ChevronDownIcon
             strokeWidth={2.5}
@@ -75,30 +87,57 @@ function Profile() {
         {profileMenuItems.map(({ label, icon, to }, key) => {
           const isLastItem = key === profileMenuItems.length - 1;
           return (
-            <Link to={to} className="w-fit">
-              <MenuItem
-                key={label}
-                onClick={closeMenu}
-                className={`flex items-center gap-2 rounded ${
-                  isLastItem
-                    ? "hover:bg-red-500/10 focus:bg-red-500/10 active:bg-red-500/10"
-                    : ""
-                }`}
-              >
-                {React.createElement(icon, {
-                  className: `h-4 w-4 ${isLastItem ? "text-red-500" : ""}`,
-                  strokeWidth: 2,
-                })}
-                <Typography
-                  as="span"
-                  variant="small"
-                  className="font-normal"
-                  color={isLastItem ? "red" : "inherit"}
+            <>
+              {isLastItem ? (
+                <MenuItem
+                  key={label}
+                  onClick={logout}
+                  className={`flex items-center gap-2 rounded ${
+                    isLastItem
+                      ? "hover:bg-red-500/10 focus:bg-red-500/10 active:bg-red-500/10"
+                      : ""
+                  }`}
                 >
-                  {label}
-                </Typography>
-              </MenuItem>
-            </Link>
+                  {React.createElement(icon, {
+                    className: `h-4 w-4 ${isLastItem ? "text-red-500" : ""}`,
+                    strokeWidth: 2,
+                  })}
+                  <Typography
+                    as="span"
+                    variant="small"
+                    className="font-normal"
+                    color={isLastItem ? "red" : "inherit"}
+                  >
+                    {label}
+                  </Typography>
+                </MenuItem>
+              ) : (
+                <Link to={to} className="w-fit">
+                  <MenuItem
+                    key={label}
+                    onClick={closeMenu}
+                    className={`flex items-center gap-2 rounded ${
+                      isLastItem
+                        ? "hover:bg-red-500/10 focus:bg-red-500/10 active:bg-red-500/10"
+                        : ""
+                    }`}
+                  >
+                    {React.createElement(icon, {
+                      className: `h-4 w-4 ${isLastItem ? "text-red-500" : ""}`,
+                      strokeWidth: 2,
+                    })}
+                    <Typography
+                      as="span"
+                      variant="small"
+                      className="font-normal"
+                      color={isLastItem ? "red" : "inherit"}
+                    >
+                      {label}
+                    </Typography>
+                  </MenuItem>
+                </Link>
+              )}
+            </>
           );
         })}
       </MenuList>
