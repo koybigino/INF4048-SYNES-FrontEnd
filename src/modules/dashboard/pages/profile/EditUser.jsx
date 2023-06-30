@@ -14,11 +14,11 @@ import {
 } from "@material-tailwind/react";
 import { PencilIcon } from "@heroicons/react/24/outline";
 import { useRecoilState, useRecoilValue } from "recoil";
-import { storeEtablissements } from "../../stores/storeSelector";
-import Select from "../select/Select";
-import { storeAllUser } from "../../stores/storeAtoms";
+import { storeEtablissements } from "../../../../stores/storeSelector";
+import Select from "../../../../components/select/Select";
+import { storeAllUser } from "../../../../stores/storeAtoms";
 import { ExclamationTriangleIcon, CheckCircleIcon } from "@heroicons/react/24/solid";
-import Alert from "../alert/Alert";
+import Alert from "../../../../components/alert/Alert";
 
 export default function EditUser({ user }) {
   const etablissements = useRecoilValue(storeEtablissements);

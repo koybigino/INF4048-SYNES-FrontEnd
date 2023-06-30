@@ -14,12 +14,15 @@ import {
   Alert,
 } from "@material-tailwind/react";
 import CreateUser from "../createuser/CreateUser";
-import UserFilter from "../usersfilter/UserFilter";
 import EditUser from "../../modules/dashboard/pages/profile/EditUser";
 import ConfirmDelete from "../confirm/ConfirmDelete";
 import { Link } from "react-router-dom";
 import { useRecoilState, useRecoilValue } from "recoil";
-import { storeAllUser, storeHeadTableSections, storeHeadTableUsers } from "../../stores/storeAtoms";
+import {
+  storeHeadTableSections,
+  storeToken,
+  storeTokenType,
+} from "../../stores/storeAtoms";
 import {
   ExclamationTriangleIcon,
   CheckCircleIcon,
@@ -28,14 +31,20 @@ import { useEffect, useState } from "react";
 import { storeGetAllSection } from "../../stores/storeSelector";
 import EditSection from "../editsection/EditSection";
 import CreateSection from "../createsection/CreateSection";
+import UserFilter from "../usersfilter/UserFilter";
+import { deleteData, getData } from "../../config/apiFunctions";
+import SpinnerDashboard from "../spinner/SpinnerDashboard";
 
-export default function SectionList() {
+export default function ActiviteList() {
   const TABLE_HEAD = useRecoilValue(storeHeadTableSections);
-  const getSections = useRecoilValue(storeGetAllSection);
+  const items = useRecoilValue(storeGetAllSection);
+  const getSections = items.items;
 
   const [TABLE_ROWS, setTableRows] = useState(getSections);
   const [showAlertSucess, setShowAlertSucess] = useState(false);
   const [showAlertDanger, setShowAlertDanger] = useState(false);
+  const token = useRecoilValue(storeToken);
+  const tokenType = useRecoilValue(storeTokenType);
 
   const handleChange = (e) => {
     e.preventDefault();
@@ -45,6 +54,16 @@ export default function SectionList() {
     });
 
     setTableRows(searchSections);
+  };
+
+  const deleteSection = (id) => {
+    deleteData(`/section/${id}`, token, tokenType);
+
+    setTableRows(null);
+
+    getData("/section/all", token, tokenType).then((res) => {
+      setTableRows(res.items);
+    });
   };
 
   return (
@@ -83,13 +102,15 @@ export default function SectionList() {
               </div>
             </div>
             <div className="flex shrink-0 flex-col gap-2 sm:flex-row">
-              <CreateSection allSections={TABLE_ROWS} setTableRows={setTableRows} />
+              <CreateSection
+                allSections={TABLE_ROWS}
+                setTableRows={setTableRows}
+              />
             </div>
           </div>
         </CardHeader>
 
         <div className="flex flex-col items-center justify-between mx-5 gap-4 md:flex-row">
-          <UserFilter allSections={TABLE_ROWS} setTableRows={setTableRows} />
           <div className="w-full md:w-72">
             <Input
               onChange={handleChange}
@@ -106,7 +127,7 @@ export default function SectionList() {
               <tr>
                 {TABLE_HEAD.map((head, index) => (
                   <th
-                    key={head}
+                    key={index}
                     className="cursor-pointer border-y border-blue-gray-100 bg-blue-gray-50/50 p-4 transition-colors hover:bg-blue-gray-50"
                   >
                     <Typography
@@ -120,25 +141,17 @@ export default function SectionList() {
                 ))}
               </tr>
             </thead>
-            <tbody>
-              {TABLE_ROWS ? (
-                TABLE_ROWS.map(
-                  (
-                    {
-                      nom,
-                      date_creation,
-                      etablissement,
-                      id,
-                    },
-                    index
-                  ) => {
+            {TABLE_ROWS ? (
+              <tbody>
+                {TABLE_ROWS.map(
+                  ({ nom, date_creation, etablissement, id }, index) => {
                     const isLast = index === TABLE_ROWS.length - 1;
                     const classes = isLast
                       ? "p-4"
                       : "p-4 border-b border-blue-gray-50";
 
                     return (
-                      <tr key={id}>
+                      <tr key={index}>
                         <td className={classes}>
                           <Link to="/">
                             <div className="flex items-center gap-3">
@@ -193,6 +206,8 @@ export default function SectionList() {
                                 etablissement,
                                 id,
                               }}
+                              allsection={TABLE_ROWS}
+                              setSection={setTableRows}
                             />
                           </Tooltip>
                         </td>
@@ -200,11 +215,8 @@ export default function SectionList() {
                           <Tooltip content="Supprimer">
                             <ConfirmDelete
                               nom={nom}
-                              allUser={TABLE_ROWS}
                               id={id}
-                              setShowAlertSucess={setShowAlertSucess}
-                              setShowAlertDanger={setShowAlertDanger}
-                              setallSections={setTableRows}
+                              deleteElement={deleteSection}
                             >
                               Voulez vous supprimer la section {nom}
                             </ConfirmDelete>
@@ -213,11 +225,11 @@ export default function SectionList() {
                       </tr>
                     );
                   }
-                )
-              ) : (
-                <Spinner />
-              )}
-            </tbody>
+                )}
+              </tbody>
+            ) : (
+              <SpinnerDashboard />
+            )}
           </table>
         </CardBody>
 
