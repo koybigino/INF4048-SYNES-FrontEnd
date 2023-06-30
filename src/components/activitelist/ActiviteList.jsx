@@ -15,6 +15,7 @@ import {
 } from "@material-tailwind/react";
 import CreateUser from "../createuser/CreateUser";
 import EditUser from "../../modules/dashboard/pages/profile/EditUser";
+import EditUser from "../edituser/EditUser";
 import ConfirmDelete from "../confirm/ConfirmDelete";
 import { Link } from "react-router-dom";
 import { useRecoilState, useRecoilValue } from "recoil";

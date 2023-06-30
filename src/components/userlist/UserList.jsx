@@ -19,23 +19,33 @@ import EditUser from "../../modules/dashboard/pages/profile/EditUser";
 import ConfirmDelete from "../confirm/ConfirmDelete";
 import { Link } from "react-router-dom";
 import { useRecoilState, useRecoilValue } from "recoil";
-import { storeAllUser, storeHeadTableUsers } from "../../stores/storeAtoms";
+import {
+  storeAllUser,
+  storeHeadTableUsers,
+  storeToken,
+  storeTokenType,
+} from "../../stores/storeAtoms";
 import {
   ExclamationTriangleIcon,
   CheckCircleIcon,
 } from "@heroicons/react/24/solid";
 import { useEffect, useState } from "react";
 import { storeGetAllUser } from "../../stores/storeSelector";
+import { deleteData, getData } from "../../config/apiFunctions";
+import SpinnerDashboard from "../spinner/SpinnerDashboard";
 
 export default function UserList() {
   const TABLE_HEAD = useRecoilValue(storeHeadTableUsers);
-  const getUsers = useRecoilValue(storeGetAllUser);
+  const items = useRecoilValue(storeGetAllUser);
+  const getUsers = items.items;
 
   const [TABLE_ROWS, setTableRows] = useState(getUsers);
   const [showAlertSucess, setShowAlertSucess] = useState(false);
   const [showAlertDanger, setShowAlertDanger] = useState(false);
+  const token = useRecoilValue(storeToken);
+  const tokenType = useRecoilValue(storeTokenType);
 
-  const handleChange = (e) => {
+  const handleChange = async (e) => {
     e.preventDefault();
 
     const searchUser = getUsers.filter((user) => {
@@ -43,6 +53,16 @@ export default function UserList() {
     });
 
     setTableRows(searchUser);
+  };
+
+  const deleteUser = (id) => {
+    deleteData(`/user/${id}`, token, tokenType);
+
+    setTableRows(null);
+
+    getData("/user/all", token, tokenType).then((res) => {
+      setTableRows(res.items);
+    });
   };
 
   return (
@@ -104,7 +124,7 @@ export default function UserList() {
               <tr>
                 {TABLE_HEAD.map((head, index) => (
                   <th
-                    key={head}
+                    key={index}
                     className="cursor-pointer border-y border-blue-gray-100 bg-blue-gray-50/50 p-4 transition-colors hover:bg-blue-gray-50"
                   >
                     <Typography
@@ -146,7 +166,7 @@ export default function UserList() {
                       : "p-4 border-b border-blue-gray-50";
 
                     return (
-                      <tr key={id}>
+                      <tr key={index}>
                         <td className={classes}>
                           <Link to="/">
                             <div className="flex items-center gap-3">
@@ -246,13 +266,15 @@ export default function UserList() {
                         <td className={classes}>
                           <Link to="/">
                             <div className="w-max">
-                              <Typography
-                                variant="small"
-                                color="blue-gray"
-                                className="font-normal"
-                              >
-                                Section : {section.nom}
-                              </Typography>
+                              {section && (
+                                <Typography
+                                  variant="small"
+                                  color="blue-gray"
+                                  className="font-normal"
+                                >
+                                  Section : {section.nom}
+                                </Typography>
+                              )}
                               <Typography
                                 variant="small"
                                 color="blue-gray"
@@ -285,6 +307,7 @@ export default function UserList() {
                           <Tooltip content="Modifier">
                             <EditUser
                               user={{
+                                id,
                                 nom,
                                 adresse_mail,
                                 age,
@@ -298,7 +321,6 @@ export default function UserList() {
                                 photo,
                                 date_creation,
                                 etablissement,
-                                id,
                               }}
                             />
                           </Tooltip>
@@ -307,11 +329,8 @@ export default function UserList() {
                           <Tooltip content="Supprimer">
                             <ConfirmDelete
                               nom={nom}
-                              allUser={TABLE_ROWS}
-                              id={id}
-                              setShowAlertSucess={setShowAlertSucess}
-                              setShowAlertDanger={setShowAlertDanger}
-                              setAllUsers={setTableRows}
+                              id={adresse_mail}
+                              deleteElement={deleteUser}
                             >
                               Voulez vous supprimer le membre
                             </ConfirmDelete>
@@ -322,7 +341,7 @@ export default function UserList() {
                   }
                 )
               ) : (
-                <Spinner />
+                <SpinnerDashboard />
               )}
             </tbody>
           </table>

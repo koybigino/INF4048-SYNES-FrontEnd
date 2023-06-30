@@ -13,38 +13,27 @@ import {
   Spinner,
   Alert,
 } from "@material-tailwind/react";
-import CreateUser from "../createuser/CreateUser";
-<<<<<<< HEAD
-import EditUser from "../../modules/dashboard/pages/profile/EditUser";
-=======
-import EditUser from "../edituser/EditUser";
->>>>>>> koybi-branch
 import ConfirmDelete from "../confirm/ConfirmDelete";
 import { Link } from "react-router-dom";
 import { useRecoilState, useRecoilValue } from "recoil";
-import {
-  storeHeadTableSections,
-  storeToken,
-  storeTokenType,
-} from "../../stores/storeAtoms";
 import {
   ExclamationTriangleIcon,
   CheckCircleIcon,
 } from "@heroicons/react/24/solid";
 import { useEffect, useState } from "react";
-import { storeGetAllSection } from "../../stores/storeSelector";
 import EditSection from "../editsection/EditSection";
 import CreateSection from "../createsection/CreateSection";
-import UserFilter from "../usersfilter/UserFilter";
 import { deleteData, getData } from "../../config/apiFunctions";
 import SpinnerDashboard from "../spinner/SpinnerDashboard";
+import { storeHeadTableContribution, storeToken, storeTokenType } from "../../stores/storeAtoms";
+import { storeGetAllContribution } from "../../stores/storeSelector";
 
-export default function ActionList() {
-  const TABLE_HEAD = useRecoilValue(storeHeadTableSections);
-  const items = useRecoilValue(storeGetAllSection);
-  const getSections = items.items;
+export default function ContributionList() {
+  const TABLE_HEAD = useRecoilValue(storeHeadTableContribution);
+  const items = useRecoilValue(storeGetAllContribution);
+  const getContributions = items.items;
 
-  const [TABLE_ROWS, setTableRows] = useState(getSections);
+  const [TABLE_ROWS, setTableRows] = useState(getContributions);
   const [showAlertSucess, setShowAlertSucess] = useState(false);
   const [showAlertDanger, setShowAlertDanger] = useState(false);
   const token = useRecoilValue(storeToken);
@@ -53,11 +42,11 @@ export default function ActionList() {
   const handleChange = (e) => {
     e.preventDefault();
 
-    const searchSections = getSections.filter((user) => {
+    const searchContributions = getContributions.filter((user) => {
       if (user.nom.includes(e.target.value)) return user;
     });
 
-    setTableRows(searchSections);
+    setTableRows(searchContributions);
   };
 
   const deleteSection = (id) => {
@@ -81,10 +70,10 @@ export default function ActionList() {
           <div className="mb-8 flex items-center justify-between gap-8">
             <div>
               <Typography variant="h5" color="blue-gray">
-                Liste des Sections
+                Liste des Contributions
               </Typography>
               <Typography color="gray" className="mt-1 font-normal">
-                Voir les informations sur les différents Sections
+                Voir les informations sur les différents Contributions
               </Typography>
               <div className="mx-10 mb-2">
                 <Alert
@@ -107,7 +96,7 @@ export default function ActionList() {
             </div>
             <div className="flex shrink-0 flex-col gap-2 sm:flex-row">
               <CreateSection
-                allSections={TABLE_ROWS}
+                allContributions={TABLE_ROWS}
                 setTableRows={setTableRows}
               />
             </div>

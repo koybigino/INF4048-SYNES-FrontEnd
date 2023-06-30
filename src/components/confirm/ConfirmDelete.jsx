@@ -16,62 +16,20 @@ import {
 } from "../../stores/storeAtoms";
 import axios from "../../config/axios";
 
-export default function ConfirmDelete({
-  nom,
-  id,
-  allUser,
-  setShowAlertDanger,
-  setShowAlertSucess,
-  children,
-  setAllUsers,
-}) {
+export default function ConfirmDelete({ nom, id, children, deleteElement }) {
   const [open, setOpen] = useState(false);
-  const token = useRecoilValue(storeToken);
-  const tokenType = useRecoilValue(storeTokenType);
   const [loading, setLoading] = useState(false);
 
-  const handleOpen = () => setOpen(!open);
+  const handleOpen = () => {
+    setOpen(!open);
+  };
 
-  const deleteUser = () => {
-    let users = allUser.filter((u) => {
-      if (id != u.id) {
-        return u;
-      }
-    });
-
-    console.log(allUser);
-
+  const handleClick = async (id) => {
     setLoading(true);
-
-    axios
-      .delete(`/user`, {
-        params: {
-          id,
-        },
-        headers: {
-          Authorization: `${tokenType} ${token}`,
-        },
-      })
-      .then((res) => {
-        console.log(res.data);
-        setLoading(false);
-        setShowAlertSucess(true);
-        setAllUsers(users);
-
-        setTimeout(() => {
-          setShowAlertSucess(false);
-        }, 5000);
-      })
-      .catch((err) => {
-        console.log(err);
-        setLoading(false);
-        handleOpen();
-        setShowAlertDanger(true);
-
-        setTimeout(() => {
-          setShowAlertDanger(false);
-        }, 5000);
-      });
+    console.log(id);
+    await deleteElement(id);
+    setLoading(false);
+    handleOpen();
   };
 
   return (
@@ -93,7 +51,7 @@ export default function ConfirmDelete({
             <span>Cancel</span>
           </Button>
           <Button
-            onClick={deleteUser}
+            onClick={() => handleClick(id)}
             className="bg-orange-500 flex text-white items-center justify-center gap-10 hover:bg-orange-500"
             variant="text"
             color="orange"

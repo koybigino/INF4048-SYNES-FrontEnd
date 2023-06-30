@@ -1,6 +1,4 @@
 import { atom } from "recoil";
-import axios from "../config/axios";
-
 
 export const storeLoader = atom({
   key: "loader",
@@ -43,8 +41,48 @@ export const storeHeadTableUsers = atom({
 });
 
 export const storeHeadTableSections = atom({
-  key: "head-table-users",
+  key: "head-table-section",
   default: ["Section", "etablissement", "Créer", "", ""],
+});
+
+export const storeHeadTableActivite = atom({
+  key: "head-table-activite",
+  default: ["Activité", "Initiateur", "Modérateurs", "membres conviés", "Durée", "Créer", "", ""],
+});
+
+export const storeHeadTableBien = atom({
+  key: "head-table-bien",
+  default: ["Bien", "Section", "Créer", "Description", "Valeur Marchante", "Créer", "", ""],
+});
+
+export const storeHeadTableCaisse = atom({
+  key: "head-table-caisse",
+  default: ["Caisse", "Initiateur", "Montant", "Description", "Créer", "", ""],
+});
+
+export const storeHeadTableContribution = atom({
+  key: "head-table-contribution",
+  default: ["Contribution", "User", "Fond", "Montant", "Créer", "", ""],
+});
+
+export const storeHeadTableDepense = atom({
+  key: "head-table-depense",
+  default: ["Depense", "Initiateur", "Montant", "Description", "Créer", "", ""],
+});
+
+export const storeHeadTableFond = atom({
+  key: "head-table-fond",
+  default: ["Fond", "Initiateur", "Caisse", "Montant", "Description", "Créer", "", ""],
+});
+
+export const storeHeadTableNotification = atom({
+  key: "head-table-notification",
+  default: ["Notification", "Entité", "Contenu", "Créer", "", ""],
+});
+
+export const storeHeadTableAction = atom({
+  key: "head-table-action",
+  default: ["Sujet", "Objet", "Type", "Créer", "", ""],
 });
 
 export const storeToken = atom({

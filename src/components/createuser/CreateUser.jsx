@@ -75,7 +75,7 @@ export default function CreateUser({ setTableRows, allUsers }) {
       },
       age: 22,
       role: "Admin",
-      sexe: "homme",
+      sexe: "Masculin",
       specialite: "Math",
       nationalite: "Cammeroon",
       adresse_mail: "john@creative-tim.com",
@@ -93,7 +93,7 @@ export default function CreateUser({ setTableRows, allUsers }) {
       axios
         .post(
           "/user",
-          { ...user, nom, adresse_mail, matricule, etablissement },
+          { nom, adresse_mail, matricule, etablissement },
           {
             headers: {
               Authorization: `${tokenType} ${token}`,
@@ -101,7 +101,7 @@ export default function CreateUser({ setTableRows, allUsers }) {
           }
         )
         .then((res) => {
-          console.log(res.data);
+          console.log(res);
           setLoading(false);
           setTableRows(users);
 

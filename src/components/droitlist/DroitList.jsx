@@ -14,7 +14,11 @@ import {
   Alert,
 } from "@material-tailwind/react";
 import CreateUser from "../createuser/CreateUser";
+<<<<<<< HEAD
 import EditUser from "../../modules/dashboard/pages/profile/EditUser";
+=======
+import EditUser from "../edituser/EditUser";
+>>>>>>> koybi-branch
 import ConfirmDelete from "../confirm/ConfirmDelete";
 import { Link } from "react-router-dom";
 import { useRecoilState, useRecoilValue } from "recoil";

@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { storeSchools, storeToken, storeUser } from "../../stores/storeAtoms";
+import { storeSchools, storeToken, storeUser } from "../../../../stores/storeAtoms";
 import { useRecoilState, useRecoilValue } from "recoil";
 import {
   Card,
@@ -9,16 +9,16 @@ import {
   Typography,
   Spinner,
 } from "@material-tailwind/react";
-import { storeEtablissements, storeUserGet } from "../../stores/storeSelector";
-import TelNumber from "../telnumber/TelNumber";
-import SelectTailwind from "../select/SelectTailwind";
-import Alert from "../alert/Alert";
+import { storeEtablissements, storeUserGet } from "../../../../stores/storeSelector";
+import TelNumber from "../../../../components/telnumber/TelNumber";
+import SelectTailwind from "../../../../components/select/SelectTailwind";
+import Alert from "../../../../components/alert/Alert";
 import {
   ExclamationTriangleIcon,
   CheckCircleIcon,
 } from "@heroicons/react/24/solid";
-import account from "../../assets/img/account.png";
-import axios from "../../config/axios";
+import account from "../../../../assets/img/account.png";
+import axios from "../../../../config/axios";
 
 export default function EditProfile() {
   const currentUser = useRecoilValue(storeUserGet);
