@@ -19,105 +19,52 @@ import {
   DialogBody,
 } from "@material-tailwind/react";
 
-import Select from "../select/Select";
-import { useRecoilState, useRecoilValue } from "recoil";
-import {
-  storeAllUser,
-  storeToken,
-  storeTokenType,
-} from "../../stores/storeAtoms";
+import { useRecoilValue } from "recoil";
+import { storeToken, storeTokenType } from "../../stores/storeAtoms";
 import Alert from "../alert/Alert";
-import { storeEtablissements } from "../../stores/storeSelector";
 import axios from "../../config/axios";
+import { getData, postData } from "../../config/apiFunctions";
 
 export default function CreateSection({ setTableRows, allSections }) {
-  const etablissements = useRecoilValue(storeEtablissements);
-
-  const [nom, setNom] = useState("");
-  const [adresse_mail, setEmail] = useState("");
-  const [matricule, setMatricule] = useState("");
   const [etablissement, setEtablissement] = useState("");
 
-  const [add, setAdd] = useState(false);
-  const [select, setSelect] = useState(false);
-  const [showRadio, setShowRadion] = useState(true);
   const [showAlertSucess, setShowAlertSucess] = useState(false);
   const [loading, setLoading] = useState(false);
   const [showAlertDanger, setShowAlertDanger] = useState(false);
   const token = useRecoilValue(storeToken);
   const tokenType = useRecoilValue(storeTokenType);
 
-  const handleAdd = () => {
-    setAdd(true);
-    setSelect(false);
-    setShowRadion(false);
-  };
-  const handleSelect = () => {
-    setSelect(true);
-    setAdd(false);
-    setShowRadion(false);
-  };
-
   const handleSubmit = (e) => {
     e.preventDefault();
 
     setLoading(true);
 
-    let users = allSections;
+    let sections = allSections;
 
-    const user = {
-      matricule: "KDK392",
-      nom: "John Michael",
-      etablissement: "Université Yaoundé I",
-      section: {
-        id: "string",
-        nom: "Section 1",
-      },
-      age: 22,
-      role: "Admin",
-      sexe: "homme",
-      specialite: "Math",
-      nationalite: "Cammeroon",
-      adresse_mail: "john@creative-tim.com",
-      phone_number: "3829302082",
-    };
-
-    users = [
-      ...users,
-      { ...user, nom, adresse_mail, matricule, etablissement },
-    ];
+    sections = [...sections, { nom: etablissement, etablissement }];
 
     if (etablissement) {
-      axios
-        .post(
-          "/user",
-          { ...user, nom, adresse_mail, matricule, etablissement },
-          {
-            headers: {
-              Authorization: `${tokenType} ${token}`,
-            },
-          }
-        )
-        .then((res) => {
-          console.log(res.data);
+      postData("/section", token, tokenType, {
+        nom: etablissement,
+        etablissement,
+      })
+        .then(() => {
           setLoading(false);
-          setTableRows(users);
 
-          setEmail("");
-          setMatricule("");
-          setNom("");
+          setTableRows(null);
+
+          getData("/section/all", token, tokenType).then((res) => {
+            setTableRows(res.items);
+          });
+
           setEtablissement("");
-          setAdd(false);
-          setSelect(false);
-          setShowRadion(true);
           setShowAlertSucess(true);
 
           setTimeout(() => {
             setShowAlertSucess(false);
           }, 5000);
         })
-        .catch((err) => {
-          console.log(err);
+        .catch(() => {
           setLoading(false);
           setShowAlertDanger(true);
 
@@ -147,13 +94,13 @@ export default function CreateSection({ setTableRows, allSections }) {
         className="flex items-center gap-3"
         size="sm"
       >
-        <UserPlusIcon strokeWidth={2} className="h-4 w-4" /> Ajouter un membre
+        <UserPlusIcon strokeWidth={2} className="h-4 w-4" /> Ajouter une Section
       </Button>
       <Dialog open={open} handler={handleOpen}>
         <DialogHeader>
           <div className="flex">
             <Typography variant="h4" color="blue-gray">
-              Création d'un membre
+              Création d'une Section
             </Typography>
           </div>
         </DialogHeader>
@@ -164,7 +111,7 @@ export default function CreateSection({ setTableRows, allSections }) {
             open={showAlertDanger}
             setOpen={setShowAlertDanger}
           >
-            Erreur de creation d'un noubeau membre !
+            Erreur de creation d'un nouvelle Section !
           </Alert>
           <Alert
             color="green"
@@ -172,29 +119,19 @@ export default function CreateSection({ setTableRows, allSections }) {
             open={showAlertSucess}
             setOpen={setShowAlertSucess}
           >
-            Creation d'un nouveau membre réussit !
+            Creation d'un nouvelle Section réussit !
           </Alert>
         </div>
         <DialogBody className="flex items-center justify-center" divider>
           <Card color="transparent" shadow={false}>
             <Typography color="gray" className="mt-1 font-normal">
-              Entrer les détails pour créer un utilisateur
+              Entrer les détails pour créer un Section
             </Typography>
             <form
               onSubmit={handleSubmit}
-              className={`mt-8 mb-2 max-w-screen-lg ${
-                showRadio ? "sm:w-fit" : "sm:w-[30rem]"
-              }`}
+              className={`mt-8 mb-2 w-80 max-w-screen-lg`}
             >
-              <div className="mb-4 flex flex-col gap-6">
-                <Input
-                  onChange={(e) => setNom(e.target.value)}
-                  value={nom}
-                  color="orange"
-                  size="lg"
-                  label="Nom"
-                  required
-                />
+              <div className="mb-4 flex  flex-col gap-6">
                 <Input
                   onChange={(e) => setEtablissement(e.target.value)}
                   value={etablissement}

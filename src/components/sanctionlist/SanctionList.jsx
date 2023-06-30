@@ -35,7 +35,7 @@ import UserFilter from "../usersfilter/UserFilter";
 import { deleteData, getData } from "../../config/apiFunctions";
 import SpinnerDashboard from "../spinner/SpinnerDashboard";
 
-export default function SectionList() {
+export default function SanctionList() {
   const TABLE_HEAD = useRecoilValue(storeHeadTableSections);
   const items = useRecoilValue(storeGetAllSection);
   const getSections = items.items;

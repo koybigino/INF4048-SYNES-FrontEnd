@@ -73,7 +73,7 @@ function Profile({user}) {
             size="sm"
             alt="candice wu"
             className="border border-main p-0.5"
-            src={user.photo.image_link ? user.photo.image_link : account}
+            src={user.photo ? (user.photo.image_link ? user.photo.image_link : account) : account}
           />
           <ChevronDownIcon
             strokeWidth={2.5}
@@ -84,13 +84,13 @@ function Profile({user}) {
         </Button>
       </MenuHandler>
       <MenuList className="p-1">
-        {profileMenuItems.map(({ label, icon, to }, key) => {
-          const isLastItem = key === profileMenuItems.length - 1;
+        {profileMenuItems.map(({ label, icon, to }, index) => {
+          const isLastItem = index === profileMenuItems.length - 1;
           return (
             <>
               {isLastItem ? (
                 <MenuItem
-                  key={label}
+                  key={index}
                   onClick={logout}
                   className={`flex items-center gap-2 rounded ${
                     isLastItem

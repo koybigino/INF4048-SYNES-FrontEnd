@@ -1,4 +1,10 @@
-import { Input, Button, IconButton, Spinner } from "@material-tailwind/react";
+import {
+  Input,
+  Button,
+  IconButton,
+  Spinner,
+  Alert,
+} from "@material-tailwind/react";
 import React, { useState } from "react";
 import { FiEye, FiEyeOff } from "react-icons/fi";
 // import {Login} from '..'
@@ -12,6 +18,10 @@ import {
   storeTokenType,
   storeUser,
 } from "../../../../stores/storeAtoms";
+import {
+  ExclamationTriangleIcon,
+  CheckCircleIcon,
+} from "@heroicons/react/24/solid";
 
 export default function Main() {
   const [password, setPassword] = useState("");
@@ -22,6 +32,8 @@ export default function Main() {
   const navigate = useNavigate();
   const [token, setToken] = useRecoilState(storeToken);
   const [tokenType, setTokenType] = useRecoilState(storeTokenType);
+  const [showAlertSucess, setShowAlertSucess] = useState(false);
+  const [showAlertDanger, setShowAlertDanger] = useState(false);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -32,13 +44,18 @@ export default function Main() {
     formdata.append("username", email);
     formdata.append("password", password);
 
-    console.log(email, password)
+    console.log(email, password);
 
     axios
       .post("login", formdata)
       .then((res) => {
+        setShowAlertSucess(true);
+
+        setTimeout(() => {
+          setShowAlertSucess(false);
+        }, 5000);
         const { access_token, token_type } = res.data;
-        console.log(token_type, access_token)
+        console.log(token_type, access_token);
         setToken(access_token);
         setTokenType(token_type);
         localStorage.setItem("userToken", access_token);
@@ -48,6 +65,11 @@ export default function Main() {
         return res.data;
       })
       .catch((err) => {
+        setShowAlertDanger(true);
+
+        setTimeout(() => {
+          setShowAlertDanger(false);
+        }, 5000);
         setLoading(false);
         return err;
       });
@@ -62,6 +84,22 @@ export default function Main() {
             <h1 className="text-3xl text-center pb-6 font-bold text-second">
               <span className="bg-main rounded-lg px-1">Sy</span> nes
             </h1>
+            <Alert
+              color="red"
+              icon={<ExclamationTriangleIcon className="h-6 w-6" />}
+              open={showAlertDanger}
+              setOpen={setShowAlertDanger}
+            >
+              Erreur de creation d'un nouvelle Section !
+            </Alert>
+            <Alert
+              color="green"
+              icon={<CheckCircleIcon className="mt-px h-6 w-6" />}
+              open={showAlertSucess}
+              setOpen={setShowAlertSucess}
+            >
+              Creation d'un nouvelle Section réussit !
+            </Alert>
             <form onSubmit={handleSubmit} action="">
               <div className="flex mx-6 flex-col justify-center items-center">
                 <h1 className="text-2xl mb-12 font-bold">Login</h1>

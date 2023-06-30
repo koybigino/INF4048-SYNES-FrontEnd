@@ -13,9 +13,9 @@ import Section from "../modules/dashboard/pages/section/Section";
 import Goods from "../modules/goods/pages/Main";
 import Details from "../modules/goods/pages/details.tsx";
 import Profile from "../modules/dashboard/pages/profile/Profile";
-import EditProfile from "../components/editProfil/EditProfile";
 import ProtectedRoute from "../navigation/GuardedRoute";
 import AuthRoute from "../navigation/AuthRoute";
+import EditProfile from "../modules/dashboard/pages/profile/EditProfile";
 
 function Router() {
   const routes = [
