@@ -58,11 +58,11 @@ function Router() {
           element: <Traçability />,
         },
         {
-          path: "/goods",
+          path: "/biens",
           element: <Goods />,
         },
         {
-          path: "/goods/details",
+          path: "/biens/details",
           element: <Details />,
         },
       ],

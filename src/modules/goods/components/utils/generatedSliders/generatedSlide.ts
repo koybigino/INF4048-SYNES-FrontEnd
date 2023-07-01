@@ -13,7 +13,6 @@ export function generateSlides( length = 30, sig = 10 ): Array<{ src: string, al
       return {
         src: `https://picsum.photos/id/${ index }/900/600`,
         alt: `Image ${ index + 1 }`,
-        className: 'slide ring-2 ring-gray-300 rounded-xl ',
       };
     } );
   }
