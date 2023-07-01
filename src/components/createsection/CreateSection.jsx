@@ -19,7 +19,7 @@ import {
   DialogBody,
 } from "@material-tailwind/react";
 
-import { useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { storeToken, storeTokenType } from "../../stores/storeAtoms";
 import Alert from "../alert/Alert";
 import { getData, postData } from "../../config/apiFunctions";
