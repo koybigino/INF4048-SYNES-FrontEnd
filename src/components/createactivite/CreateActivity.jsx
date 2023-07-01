@@ -54,6 +54,7 @@ export default function CreateActivity({ setTableRows, allActivites }) {
 
   const [showAlertSucess, setShowAlertSucess] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [activity, setActivity] = useState(null);
   const [showAlertDanger, setShowAlertDanger] = useState(false);
   const sectionNames = useRecoilValue(storeGetAllSectionName);
   const usersItems = useRecoilValue(storeGetAllUser);
@@ -95,6 +96,16 @@ export default function CreateActivity({ setTableRows, allActivites }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    setActivity({
+      titre,
+      lieu,
+      moderateurs,
+      membre_convies,
+      date_debut,
+      date_fin,
+      heure_debut,
+      heure_fin,
+    });
     console.log({
       titre,
       lieu,
@@ -103,8 +114,8 @@ export default function CreateActivity({ setTableRows, allActivites }) {
       date_debut,
       date_fin,
       heure_debut,
-      heure_fin
-    })
+      heure_fin,
+    });
     /*
     let section = {};
 
@@ -226,7 +237,10 @@ export default function CreateActivity({ setTableRows, allActivites }) {
       <PopoverContent className="w-9/12 flex flex-col justify-center items-center">
         <div className="flex justify-start">
           <Typography variant="h4" color="blue-gray">
-            Planification d'une Activité
+            Planification d'une Activité<br/>
+            {activity && (
+                <code>Activité : {JSON.stringify(activity)}</code>
+            )}
           </Typography>
         </div>
 
@@ -276,14 +290,18 @@ export default function CreateActivity({ setTableRows, allActivites }) {
               userPerSection={usersNamesPerSection}
               sectionUser={sectionUser}
               setItems={setModerateurs}
-            >Selectionné les modérateurs</SelectItems>
+            >
+              Selectionné les modérateurs
+            </SelectItems>
             <SelectItems
               sections={sectionNames}
               users={usersNames}
               userPerSection={usersNamesPerSection}
               sectionUser={sectionUser}
               setItems={setMembreConvies}
-            >Selectionné les Membres conviées</SelectItems>
+            >
+              Selectionné les Membres conviées
+            </SelectItems>
             <Input
               onChange={(e) => setDateDebut(e.target.value)}
               value={date_debut}
