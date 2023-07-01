@@ -18,9 +18,8 @@ import UserFilter from "../usersfilter/UserFilter";
 import EditUser from "../edituser/EditUser";
 import ConfirmDelete from "../confirm/ConfirmDelete";
 import { Link } from "react-router-dom";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useRecoilValue } from "recoil";
 import {
-  storeAllUser,
   storeHeadTableUsers,
   storeToken,
   storeTokenType,
@@ -56,12 +55,12 @@ export default function UserList() {
   };
 
   const deleteUser = (id) => {
-    deleteData(`/user/${id}`, token, tokenType);
+    deleteData(`/user/${id}`, token, tokenType).then(() => {
+      setTableRows(null);
 
-    setTableRows(null);
-
-    getData("/user/all", token, tokenType).then((res) => {
-      setTableRows(res.items);
+      getData("/user/all", token, tokenType).then((res) => {
+        setTableRows(res.data.items);
+      });
     });
   };
 
@@ -101,13 +100,13 @@ export default function UserList() {
               </div>
             </div>
             <div className="flex shrink-0 flex-col gap-2 sm:flex-row">
-              <CreateUser allUsers={TABLE_ROWS} setTableRows={setTableRows} />
+              <CreateUser allUsers={getUsers} setTableRows={setTableRows} />
             </div>
           </div>
         </CardHeader>
 
         <div className="flex flex-col items-center justify-between mx-5 gap-4 md:flex-row">
-          <UserFilter allUsers={TABLE_ROWS} setTableRows={setTableRows} />
+          <UserFilter allUsers={getUsers} setTableRows={setTableRows} />
           <div className="w-full md:w-72">
             <Input
               onChange={handleChange}
@@ -341,7 +340,9 @@ export default function UserList() {
                   }
                 )
               ) : (
-                <SpinnerDashboard />
+                <tr>
+                  <SpinnerDashboard />
+                </tr>
               )}
             </tbody>
           </table>

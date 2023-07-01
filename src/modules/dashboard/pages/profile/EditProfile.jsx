@@ -1,5 +1,10 @@
 import React, { useEffect, useRef, useState } from "react";
-import { storeSchools, storeToken, storeUser } from "../../../../stores/storeAtoms";
+import {
+  storeSchools,
+  storeToken,
+  storeTokenType,
+  storeUser,
+} from "../../../../stores/storeAtoms";
 import { useRecoilState, useRecoilValue } from "recoil";
 import {
   Card,
@@ -9,7 +14,11 @@ import {
   Typography,
   Spinner,
 } from "@material-tailwind/react";
-import { storeEtablissements, storeUserGet } from "../../../../stores/storeSelector";
+import {
+  storeEtablissements,
+  storeGetAllSectionName,
+  storeUserGet,
+} from "../../../../stores/storeSelector";
 import TelNumber from "../../../../components/telnumber/TelNumber";
 import SelectTailwind from "../../../../components/select/SelectTailwind";
 import Alert from "../../../../components/alert/Alert";
@@ -19,16 +28,18 @@ import {
 } from "@heroicons/react/24/solid";
 import account from "../../../../assets/img/account.png";
 import axios from "../../../../config/axios";
+import { putData } from "../../../../config/apiFunctions";
 
 export default function EditProfile() {
   const currentUser = useRecoilValue(storeUserGet);
+  const [user, setCurrentuser] = useRecoilState(storeUser);
   const imageref = useRef();
   const [imagePath, setImagePath] = useState(
     currentUser.photo ? currentUser.photo.image_link : ""
   );
-  const [photo, setPhoto] = useState();
+  const [photo, setPhoto] = useState(new FormData());
   let schools = useRecoilValue(storeEtablissements);
-  let [etablissements, setEtablissements] = useRecoilState(storeSchools);
+  let etablissements = useRecoilValue(storeGetAllSectionName);
   const [etablissement, setEtablissement] = useState(currentUser.etablissement);
   const [sexe, setSexe] = useState(currentUser.sexe);
   const [phone_number, setTel] = useState(currentUser.phone_number);
@@ -42,87 +53,98 @@ export default function EditProfile() {
   const [adresse_mail, setEmail] = useState(currentUser.adresse_mail);
   const [showAlertSucess, setShowAlertSucess] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [token, setToken] = useRecoilState(storeToken);
+  const token = useRecoilValue(storeToken);
+  const tokenType = useRecoilValue(storeTokenType);
   const [showAlertDanger, setShowAlertDanger] = useState(false);
 
   const handleClick = () => {
     imageref.current.click();
   };
 
-  useEffect(() => {
-    setEtablissements(schools);
-    setEtablissement(currentUser.etablissement);
-    setSexe(currentUser.sexe);
-    setTel(currentUser.phone_number);
-    setNationalite(currentUser.nationalite);
-    setNom(currentUser.nom);
-    setAge(currentUser.age);
-    setSpecialite(currentUser.specialite);
-    setMatricule(currentUser.matricule);
-    setEmail(currentUser.adresse_mail);
-  }, [currentUser]);
-
   const changeImage = (e) => {
+    const fd = new FormData();
     if (e.target.files && e.target.files[0]) {
       setPhoto(e.target.files[0]);
       setImagePath(URL.createObjectURL(e.target.files[0]));
+
+      fd.append("photo", e.target.files[0], e.target.files[0].name);
+
+      setPhoto(fd);
     }
   };
 
   const updateProfile = async (user) => {
     setLoading(true);
-    console.log(token, user)
-    axios
-      .put(`user/${currentUser.id}`, user, {
-        headers: { Authorization: `Bearer ${token}` },
-      })
+    console.log(token, user);
+    putData(`user/${currentUser.adresse_mail}`, token, tokenType, user)
       .then((res) => {
         console.log(res.data);
-        setShowAlertSucess(true);
+        putData("/user/photo", token, tokenType, photo)
+          .then((res) => {
+            console.log(res);
+            putData(
+              `/user/password/${password}/${ConfirmationPassword}`,
+              token,
+              tokenType
+            )
+              .then((res) => {
+                console.log(res);
+                setLoading(false);
+                setShowAlertSucess(true);
+        
+                setTimeout(() => {
+                  setShowAlertSucess(false);
+                }, 5000);
+              })
+              .catch((err) => {
+                console.log(err);
+                setLoading(false);
+                setShowAlertDanger(true);
+        
+                setTimeout(() => {
+                  setShowAlertDanger(false);
+                }, 5000);
+              });
+          })
+          .catch((err) => {
+            console.log(err);
+            setLoading(false);
+            setShowAlertDanger(true);
+    
+            setTimeout(() => {
+              setShowAlertDanger(false);
+            }, 5000);
+          });
       })
       .catch((err) => {
         console.log(err);
+        setLoading(false);
         setShowAlertDanger(true);
-        setShowAlertSucess(false);
+
+        setTimeout(() => {
+          setShowAlertDanger(false);
+        }, 5000);
       });
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    const user = {
+    const userR = {
       matricule,
       nom,
-      etablissement: currentUser.etablissement,
+      etablissement,
       age,
       sexe,
       specialite,
       nationalite,
       adresse_mail,
       phone_number,
-      photo: imagePath,
     };
 
-    const userC = {
-      id: currentUser.id,
-      matricule,
-      nom,
-      etablissement: currentUser.etablissement,
-      age,
-      sexe,
-      specialite,
-      nationalite,
-      adresse_mail,
-      phone_number,
-      photo: {
-        image_link: imagePath,
-      },
-      date_creation: currentUser.date_creation,
-    };
+    //setCurrentuser(userC);
 
-    setCurrentuser(userC);
-
-    updateProfile(user);
+    updateProfile(userR);
 
     setTimeout(() => {
       setShowAlertSucess(false);
@@ -193,7 +215,7 @@ export default function EditProfile() {
                   color="orange"
                   type="password"
                   size="lg"
-                  label="Mot de passe"
+                  label="Ancient mot de passe"
                 />
                 <Input
                   value={ConfirmationPassword}
@@ -202,7 +224,7 @@ export default function EditProfile() {
                   color="orange"
                   type="password"
                   size="lg"
-                  label="Confirmation Password"
+                  label="Nouveau mot de passe"
                 />
                 <SelectTailwind
                   value={etablissement}

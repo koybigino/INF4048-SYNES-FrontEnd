@@ -8,13 +8,6 @@ import {
   Spinner,
 } from "@material-tailwind/react";
 import { TrashIcon } from "@heroicons/react/24/outline";
-import { useRecoilState, useRecoilValue } from "recoil";
-import {
-  storeAllUser,
-  storeToken,
-  storeTokenType,
-} from "../../stores/storeAtoms";
-import axios from "../../config/axios";
 
 export default function ConfirmDelete({ nom, id, children, deleteElement }) {
   const [open, setOpen] = useState(false);
@@ -27,9 +20,10 @@ export default function ConfirmDelete({ nom, id, children, deleteElement }) {
   const handleClick = async (id) => {
     setLoading(true);
     console.log(id);
-    await deleteElement(id);
-    setLoading(false);
-    handleOpen();
+    deleteElement(id).then(() => {
+      setLoading(false);
+      handleOpen();
+    });
   };
 
   return (

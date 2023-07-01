@@ -27,11 +27,12 @@ import {
   storeTokenType,
 } from "../../stores/storeAtoms";
 import Alert from "../alert/Alert";
-import { storeEtablissements } from "../../stores/storeSelector";
+import { storeEtablissements, storeGetAllSectionName } from "../../stores/storeSelector";
 import axios from "../../config/axios";
+import { getData } from "../../config/apiFunctions";
 
 export default function CreateUser({ setTableRows, allUsers }) {
-  const etablissements = useRecoilValue(storeEtablissements);
+  const etablissements = useRecoilValue(storeGetAllSectionName);
 
   const [nom, setNom] = useState("");
   const [adresse_mail, setEmail] = useState("");
@@ -82,13 +83,6 @@ export default function CreateUser({ setTableRows, allUsers }) {
       phone_number: "3829302082",
     };
 
-    users = [
-      ...users,
-      { ...user, nom, adresse_mail, matricule, etablissement },
-    ];
-
-    
-
     if (etablissement) {
       axios
         .post(
@@ -103,7 +97,11 @@ export default function CreateUser({ setTableRows, allUsers }) {
         .then((res) => {
           console.log(res);
           setLoading(false);
-          setTableRows(users);
+          setTableRows(null);
+
+          getData("/user/all", token, tokenType).then((res) => {
+            setTableRows(res.data.items);
+          });
 
           setEmail("");
           setMatricule("");
@@ -127,7 +125,7 @@ export default function CreateUser({ setTableRows, allUsers }) {
             setShowAlertDanger(false);
           }, 5000);
         });
-    }else{
+    } else {
       setLoading(false);
       setShowAlertDanger(true);
 

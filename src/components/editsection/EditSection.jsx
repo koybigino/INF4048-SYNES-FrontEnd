@@ -63,7 +63,7 @@ export default function EditSection({ section, allsection, setSection }) {
         setSection(null);
 
         getData("/section/all", token, tokenType).then((res) => {
-          setSection(res.items);
+          setSection(res.data.items);
         });
 
         setShowAlertSucess(true);

@@ -11,15 +11,12 @@ import {
   Avatar,
   Tooltip,
   Spinner,
-  Alert,
 } from "@material-tailwind/react";
-import CreateUser from "../createuser/CreateUser";
-import EditUser from "../edituser/EditUser";
 import ConfirmDelete from "../confirm/ConfirmDelete";
 import { Link } from "react-router-dom";
 import { useRecoilState, useRecoilValue } from "recoil";
 import {
-  storeHeadTableSections,
+  storeHeadTableActivite,
   storeToken,
   storeTokenType,
 } from "../../stores/storeAtoms";
@@ -28,19 +25,24 @@ import {
   CheckCircleIcon,
 } from "@heroicons/react/24/solid";
 import { useEffect, useState } from "react";
-import { storeGetAllSection } from "../../stores/storeSelector";
+import {
+  storeGetAllActivite,
+  storeGetAllSection,
+} from "../../stores/storeSelector";
 import EditSection from "../editsection/EditSection";
 import CreateSection from "../createsection/CreateSection";
 import UserFilter from "../usersfilter/UserFilter";
 import { deleteData, getData } from "../../config/apiFunctions";
 import SpinnerDashboard from "../spinner/SpinnerDashboard";
+import AlertSuccess from "../alert/Alert";
+import CreateActivity from "../createactivite/CreateActivity";
 
-export default function ActiviteList() {
-  const TABLE_HEAD = useRecoilValue(storeHeadTableSections);
-  const items = useRecoilValue(storeGetAllSection);
-  const getSections = items.items;
+export default function ActionList() {
+  const TABLE_HEAD = useRecoilValue(storeHeadTableActivite);
+  const items = useRecoilValue(storeGetAllActivite);
+  const getActivites = items.items;
 
-  const [TABLE_ROWS, setTableRows] = useState(getSections);
+  const [TABLE_ROWS, setTableRows] = useState(getActivites);
   const [showAlertSucess, setShowAlertSucess] = useState(false);
   const [showAlertDanger, setShowAlertDanger] = useState(false);
   const token = useRecoilValue(storeToken);
@@ -49,11 +51,11 @@ export default function ActiviteList() {
   const handleChange = (e) => {
     e.preventDefault();
 
-    const searchSections = getSections.filter((user) => {
+    const searchActivites = getActivites.filter((user) => {
       if (user.nom.includes(e.target.value)) return user;
     });
 
-    setTableRows(searchSections);
+    setTableRows(searchActivites);
   };
 
   const deleteSection = (id) => {
@@ -77,33 +79,33 @@ export default function ActiviteList() {
           <div className="mb-8 flex items-center justify-between gap-8">
             <div>
               <Typography variant="h5" color="blue-gray">
-                Liste des Sections
+                Liste des Activites
               </Typography>
               <Typography color="gray" className="mt-1 font-normal">
-                Voir les informations sur les différents Sections
+                Voir les informations sur les différents Activites
               </Typography>
               <div className="mx-10 mb-2">
-                <Alert
+                <AlertSuccess
                   color="red"
                   icon={<ExclamationTriangleIcon className="h-6 w-6" />}
                   open={showAlertDanger}
                   setOpen={setShowAlertDanger}
                 >
-                  Erreur lors de la supression du Section !
-                </Alert>
-                <Alert
+                  Erreur lors de la supression d'une Activité !
+                </AlertSuccess>
+                <AlertSuccess
                   color="green"
                   icon={<CheckCircleIcon className="mt-px h-6 w-6" />}
                   open={showAlertSucess}
                   setOpen={setShowAlertSucess}
                 >
-                  Suppression du Section réussit !
-                </Alert>
+                  Suppression d'une Activité réussit !
+                </AlertSuccess>
               </div>
             </div>
             <div className="flex shrink-0 flex-col gap-2 sm:flex-row">
-              <CreateSection
-                allSections={TABLE_ROWS}
+              <CreateActivity
+                allActivites={getActivites}
                 setTableRows={setTableRows}
               />
             </div>
@@ -144,7 +146,18 @@ export default function ActiviteList() {
             {TABLE_ROWS ? (
               <tbody>
                 {TABLE_ROWS.map(
-                  ({ nom, date_creation, etablissement, id }, index) => {
+                  (
+                    {
+                      id,
+                      nom,
+                      description,
+                      valeur_marchande,
+                      section,
+                      photos,
+                      date_creation,
+                    },
+                    index
+                  ) => {
                     const isLast = index === TABLE_ROWS.length - 1;
                     const classes = isLast
                       ? "p-4"
@@ -155,6 +168,26 @@ export default function ActiviteList() {
                         <td className={classes}>
                           <Link to="/">
                             <div className="flex items-center gap-3">
+                              <div className="flex items-center -space-x-4">
+                                {photos.length > 0 ? (
+                                  photos.map((p) => (
+                                    <Avatar
+                                      src={photos[0].link}
+                                      alt="avatar"
+                                      size="sm"
+                                      className="border-2 border-main hover:z-10 focus:z-10"
+                                      variant="circular"
+                                    />
+                                  ))
+                                ) : (
+                                  <Avatar
+                                    src={account}
+                                    alt="avatar"
+                                    className="border-2 border-main hover:z-10 focus:z-10"
+                                    variant="circular"
+                                  />
+                                )}
+                              </div>
                               <div className="flex flex-col">
                                 <Typography
                                   variant="small"
@@ -182,7 +215,33 @@ export default function ActiviteList() {
                                 color="blue-gray"
                                 className="font-normal opacity-70"
                               >
-                                Etablissement : {etablissement}
+                                description : {description}
+                              </Typography>
+                            </div>
+                          </Link>
+                        </td>
+                        <td className={classes}>
+                          <Link to="/">
+                            <div className="w-max">
+                              <Typography
+                                variant="small"
+                                color="blue-gray"
+                                className="font-normal opacity-70"
+                              >
+                                valeur_marchande : {valeur_marchande}
+                              </Typography>
+                            </div>
+                          </Link>
+                        </td>
+                        <td className={classes}>
+                          <Link to="/">
+                            <div className="w-max">
+                              <Typography
+                                variant="small"
+                                color="blue-gray"
+                                className="font-normal opacity-70"
+                              >
+                                Section : {section ? section.nom : ""}
                               </Typography>
                             </div>
                           </Link>
@@ -200,14 +259,17 @@ export default function ActiviteList() {
                         </td>
                         <td className={classes}>
                           <Tooltip content="Modifier">
-                            <EditSection
-                              section={{
-                                nom,
-                                etablissement,
+                            <EditBien
+                              bien={{
                                 id,
+                                nom,
+                                description,
+                                valeur_marchande,
+                                section,
+                                photos,
                               }}
-                              allsection={TABLE_ROWS}
-                              setSection={setTableRows}
+                              allbien={TABLE_ROWS}
+                              setbien={setTableRows}
                             />
                           </Tooltip>
                         </td>
@@ -218,7 +280,7 @@ export default function ActiviteList() {
                               id={id}
                               deleteElement={deleteSection}
                             >
-                              Voulez vous supprimer la section {nom}
+                              Voulez vous supprimer l'Activité {nom}
                             </ConfirmDelete>
                           </Tooltip>
                         </td>

@@ -21,12 +21,16 @@ import {
   CheckCircleIcon,
 } from "@heroicons/react/24/solid";
 import { useEffect, useState } from "react";
-import EditSection from "../editsection/EditSection";
-import CreateSection from "../createsection/CreateSection";
 import { deleteData, getData } from "../../config/apiFunctions";
 import SpinnerDashboard from "../spinner/SpinnerDashboard";
-import { storeHeadTableBien, storeToken, storeTokenType } from "../../stores/storeAtoms";
+import {
+  storeHeadTableBien,
+  storeToken,
+  storeTokenType,
+} from "../../stores/storeAtoms";
 import { storeGetAllBiens } from "../../stores/storeSelector";
+import CreateBien from "../createbien/CreateBien";
+import EditBien from "../editbien/EditBien";
 
 export default function BienList() {
   const TABLE_HEAD = useRecoilValue(storeHeadTableBien);
@@ -50,12 +54,12 @@ export default function BienList() {
   };
 
   const deleteSection = (id) => {
-    deleteData(`/section/${id}`, token, tokenType);
+    deleteData(`/bien/${id}`, token, tokenType).then(() => {
+      setTableRows(null);
 
-    setTableRows(null);
-
-    getData("/section/all", token, tokenType).then((res) => {
-      setTableRows(res.items);
+      getData("/bien/all", token, tokenType).then((res) => {
+        setTableRows(res.data.items);
+      });
     });
   };
 
@@ -82,7 +86,7 @@ export default function BienList() {
                   open={showAlertDanger}
                   setOpen={setShowAlertDanger}
                 >
-                  Erreur lors de la supression du Section !
+                  Erreur lors de la supression du Bien !
                 </Alert>
                 <Alert
                   color="green"
@@ -90,15 +94,12 @@ export default function BienList() {
                   open={showAlertSucess}
                   setOpen={setShowAlertSucess}
                 >
-                  Suppression du Section réussit !
+                  Suppression du Bien réussit !
                 </Alert>
               </div>
             </div>
             <div className="flex shrink-0 flex-col gap-2 sm:flex-row">
-              <CreateSection
-                allBiens={TABLE_ROWS}
-                setTableRows={setTableRows}
-              />
+              <CreateBien allBiens={TABLE_ROWS} setTableRows={setTableRows} />
             </div>
           </div>
         </CardHeader>
@@ -137,7 +138,18 @@ export default function BienList() {
             {TABLE_ROWS ? (
               <tbody>
                 {TABLE_ROWS.map(
-                  ({ nom, date_creation, etablissement, id }, index) => {
+                  (
+                    {
+                      id,
+                      nom,
+                      description,
+                      valeur_marchande,
+                      section,
+                      photos,
+                      date_creation,
+                    },
+                    index
+                  ) => {
                     const isLast = index === TABLE_ROWS.length - 1;
                     const classes = isLast
                       ? "p-4"
@@ -148,6 +160,26 @@ export default function BienList() {
                         <td className={classes}>
                           <Link to="/">
                             <div className="flex items-center gap-3">
+                              <div className="flex items-center -space-x-4">
+                                {photos.length > 0 ? (
+                                  photos.map((p) => (
+                                    <Avatar
+                                      src={p.link}
+                                      alt="avatar"
+                                      size="sm"
+                                      className="border-2 border-main hover:z-10 focus:z-10"
+                                      variant="circular"
+                                    />
+                                  ))
+                                ) : (
+                                  <Avatar
+                                    src={account}
+                                    alt="avatar"
+                                    className="border-2 border-main hover:z-10 focus:z-10"
+                                    variant="circular"
+                                  />
+                                )}
+                              </div>
                               <div className="flex flex-col">
                                 <Typography
                                   variant="small"
@@ -175,7 +207,33 @@ export default function BienList() {
                                 color="blue-gray"
                                 className="font-normal opacity-70"
                               >
-                                Etablissement : {etablissement}
+                                description : {description}
+                              </Typography>
+                            </div>
+                          </Link>
+                        </td>
+                        <td className={classes}>
+                          <Link to="/">
+                            <div className="w-max">
+                              <Typography
+                                variant="small"
+                                color="blue-gray"
+                                className="font-normal opacity-70"
+                              >
+                                valeur_marchande : {valeur_marchande}
+                              </Typography>
+                            </div>
+                          </Link>
+                        </td>
+                        <td className={classes}>
+                          <Link to="/">
+                            <div className="w-max">
+                              <Typography
+                                variant="small"
+                                color="blue-gray"
+                                className="font-normal opacity-70"
+                              >
+                                Section : {section ? section.nom : ""}
                               </Typography>
                             </div>
                           </Link>
@@ -193,14 +251,17 @@ export default function BienList() {
                         </td>
                         <td className={classes}>
                           <Tooltip content="Modifier">
-                            <EditSection
-                              section={{
-                                nom,
-                                etablissement,
+                            <EditBien
+                              bien={{
                                 id,
+                                nom,
+                                description,
+                                valeur_marchande,
+                                section,
+                                photos,
                               }}
-                              allsection={TABLE_ROWS}
-                              setSection={setTableRows}
+                              allbien={TABLE_ROWS}
+                              setbien={setTableRows}
                             />
                           </Tooltip>
                         </td>
@@ -211,7 +272,7 @@ export default function BienList() {
                               id={id}
                               deleteElement={deleteSection}
                             >
-                              Voulez vous supprimer la section {nom}
+                              Voulez vous supprimer le Bien {nom}
                             </ConfirmDelete>
                           </Tooltip>
                         </td>
