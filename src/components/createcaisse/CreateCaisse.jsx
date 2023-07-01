@@ -22,9 +22,10 @@ import {
 import { useRecoilValue } from "recoil";
 import { storeToken, storeTokenType } from "../../stores/storeAtoms";
 import Alert from "../alert/Alert";
+import axios from "../../config/axios";
 import { getData, postData } from "../../config/apiFunctions";
 
-export default function CreateSection({ setTableRows, allSections }) {
+export default function CreateCaisse({ setTableRows, allCaisses }) {
   const [etablissement, setEtablissement] = useState("");
 
   const [showAlertSucess, setShowAlertSucess] = useState(false);
@@ -38,8 +39,12 @@ export default function CreateSection({ setTableRows, allSections }) {
 
     setLoading(true);
 
+    let caisses = allCaisses;
+
+    caisses = [...caisses, { nom: etablissement, etablissement }];
+
     if (etablissement) {
-      postData("/section", token, tokenType, {
+      postData("/caisse", token, tokenType, {
         nom: etablissement,
         etablissement,
       })
@@ -48,8 +53,8 @@ export default function CreateSection({ setTableRows, allSections }) {
 
           setTableRows(null);
 
-          getData("/section/all", token, tokenType).then((res) => {
-            setTableRows(res.data.items);
+          getData("/caisse/all", token, tokenType).then((res) => {
+            setTableRows(res.items);
           });
 
           setEtablissement("");

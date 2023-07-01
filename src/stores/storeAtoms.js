@@ -7,7 +7,7 @@ export const storeLoader = atom({
 
 export const storeUser = atom({
   key: "user",
-  default: {},
+  default: null,
 });
 
 export const storeSchools = atom({

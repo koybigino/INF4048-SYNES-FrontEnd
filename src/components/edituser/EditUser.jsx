@@ -1,11 +1,11 @@
 import {
-  Alert,
   Card,
   IconButton,
   Input,
   Spinner,
   Typography,
 } from "@material-tailwind/react";
+import Alert from "../alert/Alert";
 
 import { Fragment, useState } from "react";
 import {
@@ -16,18 +16,22 @@ import {
 } from "@material-tailwind/react";
 import { PencilIcon } from "@heroicons/react/24/outline";
 import { useRecoilState, useRecoilValue } from "recoil";
-import { storeEtablissements } from "../../stores/storeSelector";
+import { storeGetAllSectionName } from "../../stores/storeSelector";
 import Select from "../select/Select";
-import { storeAllUser, storeToken, storeTokenType } from "../../stores/storeAtoms";
+import {
+  storeAllUser,
+  storeToken,
+  storeTokenType,
+} from "../../stores/storeAtoms";
 import {
   ExclamationTriangleIcon,
   CheckCircleIcon,
 } from "@heroicons/react/24/solid";
 import axios from "../../config/axios";
+import { getData, postData, putData } from "../../config/apiFunctions";
 
 export default function EditUser({ user }) {
-  const etablissements = useRecoilValue(storeEtablissements);
-  const [allUser, setAllUsers] = useRecoilState(storeAllUser);
+  const etablissements = useRecoilValue(storeGetAllSectionName);
 
   const [open, setOpen] = useState(false);
 
@@ -45,53 +49,23 @@ export default function EditUser({ user }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    setLoading(true)
-
-    let users = allUser.filter((u) => {
-      if(user.id != u.id){
-        return u;
-      }
-    });
-
-    setAllUsers(users);
-
-    const userC = {
-      matricule: "KDK392",
-      nom: "John Michael",
-      etablissement: "Université Yaoundé I",
-      section: {
-        id: "string",
-        nom: "Section 1",
-      },
-      age: 22,
-      role: "Admin",
-      sexe: "homme",
-      specialite: "Math",
-      nationalite: "Cammeroon",
-      adresse_mail: "john@creative-tim.com",
-      phone_number: "3829302082",
-    };
-
-    users = [
-      ...users,
-      { ...userC, nom, adresse_mail, matricule, etablissement },
-    ];
+    setLoading(true);
 
     if (etablissement) {
-      axios
-        .post(
-          "/user/" + user.id,
-          { ...userC, nom, adresse_mail, matricule, etablissement },
-          {
-            headers: {
-              Authorization: `${tokenType} ${token}`,
-            },
-          }
-        )
+      putData("/user/" + user.adresse_mail, token, tokenType, {
+        nom,
+        adresse_mail,
+        matricule,
+        etablissement,
+      })
         .then((res) => {
           console.log(res.data);
           setLoading(false);
-          setTableRows(users);
+          setTableRows(null);
+
+          getData("/user/all", token, tokenType).then((res) => {
+            setTableRows(res.data.items);
+          });
 
           setShowAlertSucess(true);
 
@@ -117,7 +91,6 @@ export default function EditUser({ user }) {
       }, 5000);
     }
   };
-
 
   return (
     <Fragment>

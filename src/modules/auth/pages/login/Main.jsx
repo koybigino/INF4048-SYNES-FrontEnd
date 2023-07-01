@@ -90,7 +90,7 @@ export default function Main() {
               open={showAlertDanger}
               setOpen={setShowAlertDanger}
             >
-              Erreur de creation d'un nouvelle Section !
+              Erreur Mot de passe ou utilisateur incorrecte !
             </Alert>
             <Alert
               color="green"
@@ -98,8 +98,9 @@ export default function Main() {
               open={showAlertSucess}
               setOpen={setShowAlertSucess}
             >
-              Creation d'un nouvelle Section réussit !
+              Login réussi !
             </Alert>
+            
             <form onSubmit={handleSubmit} action="">
               <div className="flex mx-6 flex-col justify-center items-center">
                 <h1 className="text-2xl mb-12 font-bold">Login</h1>

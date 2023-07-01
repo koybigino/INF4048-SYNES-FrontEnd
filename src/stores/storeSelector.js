@@ -28,12 +28,14 @@ export const storeEtablissements = selector({
 
     let etablissements = [];
 
-    if (allUser.items.length > 0) {
-      allUser.items.filter((user) => {
-        if (!etablissements.includes(user.etablissement)) {
-          etablissements.push(user.etablissement);
-        }
-      });
+    if (allUser.items) {
+      if (allUser.items.length > 0) {
+        allUser.items.filter((user) => {
+          if (!etablissements.includes(user.etablissement)) {
+            etablissements.push(user.etablissement);
+          }
+        });
+      }
     }
 
     return etablissements;
@@ -67,6 +69,34 @@ export const storeGetAllSection = selector({
     const tokenType = get(storeTokenType);
 
     return fetchData("/section/all", token, tokenType);
+  },
+});
+
+export const storeGetAllSectionName = selector({
+  key: "get-all-section-name",
+  get: async ({ get }) => {
+    const sections = get(storeGetAllSection);
+    const sectionNames = [];
+
+    sections.items.forEach((s) => {
+      sectionNames.push(s.nom);
+    });
+
+    return sectionNames;
+  },
+});
+
+export const storeGetAllUserName = selector({
+  key: "get-all-user-name",
+  get: async ({ get }) => {
+    const users = get(storeGetAllUser);
+    const userNames = [];
+
+    users.items.forEach((s) => {
+      userNames.push(s.nom);
+    });
+
+    return userNames;
   },
 });
 
@@ -157,13 +187,15 @@ export const storeSections = selector({
 
     let secs = ["All"];
 
-    allUser.items.filter((user) => {
-      if (user.section) {
-        if (!secs.includes(user.section.nom)) {
-          secs.push(user.section.nom);
+    if (allUser.items) {
+      allUser.items.filter((user) => {
+        if (user.section) {
+          if (!secs.includes(user.section.nom)) {
+            secs.push(user.section.nom);
+          }
         }
-      }
-    });
+      });
+    }
 
     return secs;
   },

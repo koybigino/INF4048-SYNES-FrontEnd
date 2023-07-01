@@ -27,6 +27,7 @@ import { deleteData, getData } from "../../config/apiFunctions";
 import SpinnerDashboard from "../spinner/SpinnerDashboard";
 import { storeHeadTableCaisse, storeToken, storeTokenType } from "../../stores/storeAtoms";
 import { storeGetAllCaisse } from "../../stores/storeSelector";
+import CreateCaisse from "../createcaisse/CreateCaisse";
 
 export default function CaisseList() {
   const TABLE_HEAD = useRecoilValue(storeHeadTableCaisse);
@@ -82,7 +83,7 @@ export default function CaisseList() {
                   open={showAlertDanger}
                   setOpen={setShowAlertDanger}
                 >
-                  Erreur lors de la supression du Section !
+                  Erreur lors de la supression d'une Caisse !
                 </Alert>
                 <Alert
                   color="green"
@@ -90,13 +91,13 @@ export default function CaisseList() {
                   open={showAlertSucess}
                   setOpen={setShowAlertSucess}
                 >
-                  Suppression du Section réussit !
+                  Suppression d'une Caisse réussit !
                 </Alert>
               </div>
             </div>
             <div className="flex shrink-0 flex-col gap-2 sm:flex-row">
-              <CreateSection
-                allCaisse={TABLE_ROWS}
+              <CreateCaisse
+                allCaisses={TABLE_ROWS}
                 setTableRows={setTableRows}
               />
             </div>

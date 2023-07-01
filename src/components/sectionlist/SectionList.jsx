@@ -11,13 +11,13 @@ import {
   Avatar,
   Tooltip,
   Spinner,
-  Alert,
 } from "@material-tailwind/react";
 import CreateUser from "../createuser/CreateUser";
 import EditUser from "../edituser/EditUser";
 import ConfirmDelete from "../confirm/ConfirmDelete";
 import { Link } from "react-router-dom";
 import { useRecoilState, useRecoilValue } from "recoil";
+import Alert from "../alert/Alert";
 import {
   storeHeadTableSections,
   storeToken,
@@ -31,7 +31,6 @@ import { useEffect, useState } from "react";
 import { storeGetAllSection } from "../../stores/storeSelector";
 import EditSection from "../editsection/EditSection";
 import CreateSection from "../createsection/CreateSection";
-import UserFilter from "../usersfilter/UserFilter";
 import { deleteData, getData } from "../../config/apiFunctions";
 import SpinnerDashboard from "../spinner/SpinnerDashboard";
 
@@ -57,12 +56,12 @@ export default function SectionList() {
   };
 
   const deleteSection = (id) => {
-    deleteData(`/section/${id}`, token, tokenType);
+    deleteData(`/section/${id}`, token, tokenType).then(() => {
+      setTableRows(null);
 
-    setTableRows(null);
-
-    getData("/section/all", token, tokenType).then((res) => {
-      setTableRows(res.items);
+      getData("/section/all", token, tokenType).then((res) => {
+        setTableRows(res.data.items);
+      });
     });
   };
 

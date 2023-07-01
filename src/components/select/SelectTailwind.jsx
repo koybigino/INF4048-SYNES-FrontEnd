@@ -11,9 +11,8 @@ export default function SelectTailwind({
     <div className="w-full">
       <Select
         color="orange"
-        value={value}
         label={label}
-        onChange={(e) => onSelectChange(e.target.value)}
+        onChange={(e) => onSelectChange(e)}
       >
         {options ? (
           options.map((op) => (

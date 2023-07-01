@@ -62,6 +62,7 @@ export default function TelNumber({ value, setTel, setcountry }) {
         onChange={(e) => setTel(e.target.value)}
         value={value}
         type="tel"
+        required
         placeholder="Mobile Number"
         className="rounded-l-none !border-t-blue-gray-200 focus:!border-t-blue-500"
         labelProps={{
