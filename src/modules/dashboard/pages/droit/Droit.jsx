@@ -1,15 +1,15 @@
-import React from 'react'
-import DashboardHeader from '../../../../components/dashboardheader/DashboardHeader'
+import React from "react";
+import DroitList from "../../../../components/droitlist/DroitList";
+import Container from "../../../../components/container/Container";
 
 function Droit() {
   return (
-    <>
-      <DashboardHeader title="Gestion des droits & roles des utilisateurs">
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam,
-        voluptatum.
-      </DashboardHeader>
-    </>
-  )
+    <Container>
+      <div className="flex items-center my-10 justify-center">
+        <DroitList />
+      </div>
+    </Container>
+  );
 }
 
-export default Droit
+export default Droit;

@@ -14,8 +14,9 @@ import { storeToken } from "../../stores/storeAtoms";
 import { HashLink } from "react-router-hash-link";
 import Profile from "../profile/ProfileIcon";
 import NotificationBadge from "../badge/NotificationBadge";
+import { Link } from "react-router-dom";
 
-export default function NavSamePage() {
+export default function NavSamePage({user}) {
   const [openNav, setOpenNav] = useState(false);
   const [transparent, setTransparent] = useState(true);
   const token = useRecoilValue(storeToken);
@@ -133,12 +134,14 @@ export default function NavSamePage() {
           </Typography>
           <div className="hidden lg:block">{navList}</div>
           {token ? (
-           <> <Profile />
+           <> <Profile user={user}/>
             <NotificationBadge /> </>
           ) : (
-            <Button color="orange" className="rounded-full w-fit">
-              log in
-            </Button>
+            <Link to="/login">
+              <Button color="orange" className="rounded-full w-fit">
+                Log in
+              </Button>
+            </Link>
           )}
           <IconButton
             variant="text"

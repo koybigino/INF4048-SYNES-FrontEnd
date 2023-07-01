@@ -2,8 +2,10 @@ import {
   Card,
   IconButton,
   Input,
+  Spinner,
   Typography,
 } from "@material-tailwind/react";
+import Alert from "../alert/Alert";
 
 import { Fragment, useState } from "react";
 import {
@@ -14,15 +16,22 @@ import {
 } from "@material-tailwind/react";
 import { PencilIcon } from "@heroicons/react/24/outline";
 import { useRecoilState, useRecoilValue } from "recoil";
-import { storeEtablissement } from "../../stores/storeSelector";
+import { storeGetAllSectionName } from "../../stores/storeSelector";
 import Select from "../select/Select";
-import { storeAllUser } from "../../stores/storeAtoms";
-import { ExclamationTriangleIcon, CheckCircleIcon } from "@heroicons/react/24/solid";
-import Alert from "../alert/Alert";
+import {
+  storeAllUser,
+  storeToken,
+  storeTokenType,
+} from "../../stores/storeAtoms";
+import {
+  ExclamationTriangleIcon,
+  CheckCircleIcon,
+} from "@heroicons/react/24/solid";
+import axios from "../../config/axios";
+import { getData, postData, putData } from "../../config/apiFunctions";
 
 export default function EditUser({ user }) {
-  const etablissements = useRecoilValue(storeEtablissement);
-  const [allUser, setAllUsers] = useRecoilState(storeAllUser);
+  const etablissements = useRecoilValue(storeGetAllSectionName);
 
   const [open, setOpen] = useState(false);
 
@@ -34,30 +43,53 @@ export default function EditUser({ user }) {
   const [etablissement, setEtablissement] = useState(user.etablissement);
   const [showAlertSucess, setShowAlertSucess] = useState(false);
   const [showAlertDanger, setShowAlertDanger] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const token = useRecoilValue(storeToken);
+  const tokenType = useRecoilValue(storeTokenType);
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    setLoading(true);
 
-    let users = allUser.filter((u) => {
-      if(user.id != u.id){
-        return u;
-      }
-    });
+    if (etablissement) {
+      putData("/user/" + user.adresse_mail, token, tokenType, {
+        nom,
+        adresse_mail,
+        matricule,
+        etablissement,
+      })
+        .then((res) => {
+          console.log(res.data);
+          setLoading(false);
+          setTableRows(null);
 
-    setAllUsers(users);
+          getData("/user/all", token, tokenType).then((res) => {
+            setTableRows(res.data.items);
+          });
 
-    users = [
-      ...users,
-      { ...user, nom, adresse_mail, matricule, etablissement },
-    ];
+          setShowAlertSucess(true);
 
-    setAllUsers(users);
+          setTimeout(() => {
+            setShowAlertSucess(false);
+          }, 5000);
+        })
+        .catch((err) => {
+          console.log(err);
+          setLoading(false);
+          setShowAlertDanger(true);
 
-    setShowAlertSucess(true)
+          setTimeout(() => {
+            setShowAlertDanger(false);
+          }, 5000);
+        });
+    } else {
+      setLoading(false);
+      setShowAlertDanger(true);
 
-    setTimeout(() => {
-      setShowAlertSucess(false)
-    }, 5000);
+      setTimeout(() => {
+        setShowAlertDanger(false);
+      }, 5000);
+    }
   };
 
   return (
@@ -72,12 +104,22 @@ export default function EditUser({ user }) {
           </Typography>
         </DialogHeader>
         <div className="mx-10 mb-2">
-        <Alert color="red" icon={<ExclamationTriangleIcon className="h-6 w-6" />} open={showAlertDanger} setOpen={setShowAlertDanger}>
-          Erreur lors de la modification des informations du membre !
-        </Alert>
-        <Alert color="green" icon={<CheckCircleIcon className="mt-px h-6 w-6" />} open={showAlertSucess} setOpen={setShowAlertSucess}>
-          Modification des informations du membre réussit !
-        </Alert>
+          <Alert
+            color="red"
+            icon={<ExclamationTriangleIcon className="h-6 w-6" />}
+            open={showAlertDanger}
+            setOpen={setShowAlertDanger}
+          >
+            Erreur lors de la modification des informations du membre !
+          </Alert>
+          <Alert
+            color="green"
+            icon={<CheckCircleIcon className="mt-px h-6 w-6" />}
+            open={showAlertSucess}
+            setOpen={setShowAlertSucess}
+          >
+            Modification des informations du membre réussit !
+          </Alert>
         </div>
         <DialogBody className="flex items-center justify-center" divider>
           <Card color="transparent" shadow={false}>
@@ -119,10 +161,10 @@ export default function EditUser({ user }) {
               <Button
                 type="submit"
                 color="orange"
-                className="mt-6 bg-main"
+                className="mt-6 bg-main flex items-center gap-10 justify-center"
                 fullWidth
               >
-                Editer
+                Editer {loading && <Spinner color="amber" />}
               </Button>
             </form>
           </Card>

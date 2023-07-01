@@ -5,33 +5,26 @@ import {
   DialogHeader,
   DialogFooter,
   IconButton,
+  Spinner,
 } from "@material-tailwind/react";
 import { TrashIcon } from "@heroicons/react/24/outline";
-import { useRecoilState } from "recoil";
-import { storeAllUser } from "../../stores/storeAtoms";
 
-export default function ConfirmDelete({nom, id, setShowAlertDanger, setShowAlertSucess}) {
+export default function ConfirmDelete({ nom, id, children, deleteElement }) {
   const [open, setOpen] = useState(false);
-  const [allUser, setAllUsers] = useRecoilState(storeAllUser);
+  const [loading, setLoading] = useState(false);
 
-  const handleOpen = () => setOpen(!open);
+  const handleOpen = () => {
+    setOpen(!open);
+  };
 
-  const deleteUser = () => {
-    handleOpen()
-    let users = allUser.filter((u) => {
-      if(id != u.id){
-        return u;
-      }
+  const handleClick = async (id) => {
+    setLoading(true);
+    console.log(id);
+    deleteElement(id).then(() => {
+      setLoading(false);
+      handleOpen();
     });
-
-    setAllUsers(users);
-
-    setShowAlertSucess(true)
-
-    setTimeout(() => {
-      setShowAlertSucess(false)
-    }, 5000);
-  }
+  };
 
   return (
     <Fragment>
@@ -39,7 +32,9 @@ export default function ConfirmDelete({nom, id, setShowAlertDanger, setShowAlert
         <TrashIcon color="red" className="h-4 w-4" />
       </IconButton>
       <Dialog open={open} handler={handleOpen}>
-        <DialogHeader>Voulez vous supprimer le membre {nom}</DialogHeader>
+        <DialogHeader>
+          {children} {nom}
+        </DialogHeader>
         <DialogFooter>
           <Button
             variant="text"
@@ -49,8 +44,13 @@ export default function ConfirmDelete({nom, id, setShowAlertDanger, setShowAlert
           >
             <span>Cancel</span>
           </Button>
-          <Button onClick={deleteUser} className="bg-orange-500 text-white hover:bg-orange-500" variant="text" color="orange">
-            <span>Confirm</span>
+          <Button
+            onClick={() => handleClick(id)}
+            className="bg-orange-500 flex text-white items-center justify-center gap-10 hover:bg-orange-500"
+            variant="text"
+            color="orange"
+          >
+            <span>Confirm</span> {loading && <Spinner />}
           </Button>
         </DialogFooter>
       </Dialog>

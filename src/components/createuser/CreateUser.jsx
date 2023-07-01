@@ -1,6 +1,15 @@
 import { UserPlusIcon } from "@heroicons/react/24/solid";
-import { Card, Input, Typography, Radio } from "@material-tailwind/react";
-import { ExclamationTriangleIcon, CheckCircleIcon } from "@heroicons/react/24/solid";
+import {
+  Card,
+  Input,
+  Typography,
+  Radio,
+  Spinner,
+} from "@material-tailwind/react";
+import {
+  ExclamationTriangleIcon,
+  CheckCircleIcon,
+} from "@heroicons/react/24/solid";
 
 import { Fragment, useState } from "react";
 import {
@@ -12,14 +21,18 @@ import {
 
 import Select from "../select/Select";
 import { useRecoilState, useRecoilValue } from "recoil";
-import { storeEtablissement } from "../../stores/storeSelector";
-import { storeAllUser } from "../../stores/storeAtoms";
+import {
+  storeAllUser,
+  storeToken,
+  storeTokenType,
+} from "../../stores/storeAtoms";
 import Alert from "../alert/Alert";
+import { storeEtablissements, storeGetAllSectionName } from "../../stores/storeSelector";
+import axios from "../../config/axios";
+import { getData } from "../../config/apiFunctions";
 
-export default function CreateUser() {
-  const etablissements = useRecoilValue(storeEtablissement);
-
-  const [allUser, setAllUsers] = useRecoilState(storeAllUser);
+export default function CreateUser({ setTableRows, allUsers }) {
+  const etablissements = useRecoilValue(storeGetAllSectionName);
 
   const [nom, setNom] = useState("");
   const [adresse_mail, setEmail] = useState("");
@@ -30,15 +43,18 @@ export default function CreateUser() {
   const [select, setSelect] = useState(false);
   const [showRadio, setShowRadion] = useState(true);
   const [showAlertSucess, setShowAlertSucess] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [showAlertDanger, setShowAlertDanger] = useState(false);
+  const token = useRecoilValue(storeToken);
+  const tokenType = useRecoilValue(storeTokenType);
 
   const handleAdd = () => {
     setAdd(true);
-    setSelect(false)
+    setSelect(false);
     setShowRadion(false);
   };
   const handleSelect = () => {
-    setSelect(true)
+    setSelect(true);
     setAdd(false);
     setShowRadion(false);
   };
@@ -46,10 +62,11 @@ export default function CreateUser() {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    let users = allUser;
+    setLoading(true);
+
+    let users = allUsers;
 
     const user = {
-      id: users.length + 2,
       matricule: "KDK392",
       nom: "John Michael",
       etablissement: "Université Yaoundé I",
@@ -59,37 +76,63 @@ export default function CreateUser() {
       },
       age: 22,
       role: "Admin",
-      sexe: "homme",
+      sexe: "Masculin",
       specialite: "Math",
-      nationalite: "Cammeroun",
+      nationalite: "Cammeroon",
       adresse_mail: "john@creative-tim.com",
       phone_number: "3829302082",
-      photo: {
-        image_link:
-          "https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1480&q=80",
-      },
-      date_creation: new Date().toDateString(),
     };
 
-    users = [
-      ...users,
-      { ...user, nom, adresse_mail, matricule, etablissement },
-    ];
+    if (etablissement) {
+      axios
+        .post(
+          "/user",
+          { nom, adresse_mail, matricule, etablissement },
+          {
+            headers: {
+              Authorization: `${tokenType} ${token}`,
+            },
+          }
+        )
+        .then((res) => {
+          console.log(res);
+          setLoading(false);
+          setTableRows(null);
 
-    setAllUsers(users);
+          getData("/user/all", token, tokenType).then((res) => {
+            setTableRows(res.data.items);
+          });
 
-    setEmail("");
-    setMatricule("");
-    setNom("");
-    setEtablissement("");
-    setAdd(false);
-    setSelect(false);
-    setShowRadion(true);
-    setShowAlertSucess(true)
+          setEmail("");
+          setMatricule("");
+          setNom("");
+          setEtablissement("");
+          setAdd(false);
+          setSelect(false);
+          setShowRadion(true);
+          setShowAlertSucess(true);
 
-    setTimeout(() => {
-      setShowAlertSucess(false)
-    }, 5000);
+          setTimeout(() => {
+            setShowAlertSucess(false);
+          }, 5000);
+        })
+        .catch((err) => {
+          console.log(err);
+          setLoading(false);
+          setShowAlertDanger(true);
+
+          setTimeout(() => {
+            setShowAlertDanger(false);
+          }, 5000);
+        });
+    } else {
+      setLoading(false);
+      setShowAlertDanger(true);
+
+      setTimeout(() => {
+        setShowAlertDanger(false);
+      }, 5000);
+    }
   };
 
   const [open, setOpen] = useState(false);
@@ -115,12 +158,22 @@ export default function CreateUser() {
           </div>
         </DialogHeader>
         <div className="mx-10 mb-2">
-        <Alert color="red" icon={<ExclamationTriangleIcon className="h-6 w-6" />} open={showAlertDanger} setOpen={setShowAlertDanger}>
-          Erreur de creation d'un noubeau membre !
-        </Alert>
-        <Alert color="green" icon={<CheckCircleIcon className="mt-px h-6 w-6" />} open={showAlertSucess} setOpen={setShowAlertSucess}>
-          Creation d'un nouveau membre réussit !
-        </Alert>
+          <Alert
+            color="red"
+            icon={<ExclamationTriangleIcon className="h-6 w-6" />}
+            open={showAlertDanger}
+            setOpen={setShowAlertDanger}
+          >
+            Erreur de creation d'un noubeau membre !
+          </Alert>
+          <Alert
+            color="green"
+            icon={<CheckCircleIcon className="mt-px h-6 w-6" />}
+            open={showAlertSucess}
+            setOpen={setShowAlertSucess}
+          >
+            Creation d'un nouveau membre réussit !
+          </Alert>
         </div>
         <DialogBody className="flex items-center justify-center" divider>
           <Card color="transparent" shadow={false}>
@@ -148,6 +201,7 @@ export default function CreateUser() {
                   color="orange"
                   size="lg"
                   label="Email"
+                  type="email"
                   required
                 />
                 <Input
@@ -196,10 +250,10 @@ export default function CreateUser() {
               <Button
                 type="submit"
                 color="orange"
-                className="mt-6 bg-main"
+                className="mt-6 bg-main  flex justify-center gap-10"
                 fullWidth
               >
-                Créer
+                Créer {loading && <Spinner color="amber" />}
               </Button>
             </form>
           </Card>

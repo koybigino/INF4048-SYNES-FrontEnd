@@ -1,15 +1,15 @@
-import React from 'react'
-import DashboardHeader from '../../../../components/dashboardheader/DashboardHeader'
+import React from "react";
+import ActiviteList from "../../../../components/activitelist/ActiviteList";
+import Container from "../../../../components/container/Container";
 
 function Activity() {
   return (
-    <>
-      <DashboardHeader title="Gestion des activités">
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam,
-        voluptatum.
-      </DashboardHeader>
-    </>
-  )
+    <Container>
+      <div className="flex items-center my-10 justify-center">
+        <ActiviteList />
+      </div>
+    </Container>
+  );
 }
 
-export default Activity
+export default Activity;
