@@ -65,6 +65,11 @@ export default function Main() {
         return res.data;
       })
       .catch((err) => {
+        if(err.response.data.detail === "Could not validate credentials"){
+          setToken("")
+          setTokenType("")
+          localStorage.clear()
+        }
         setShowAlertDanger(true);
 
         setTimeout(() => {

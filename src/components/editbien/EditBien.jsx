@@ -44,8 +44,8 @@ export default function EditBien({ bien, allbien, setbien }) {
   const [showAlertDanger, setShowAlertDanger] = useState(false);
   const [loading, setLoading] = useState(false);
   const sectionNames = useRecoilValue(storeGetAllSectionName);
-  const token = useRecoilValue(storeToken);
-  const tokenType = useRecoilValue(storeTokenType);
+  const [token, setToken] = useRecoilState(storeToken);
+  const [tokenType, setTokenType] = useRecoilState(storeTokenType);
   const imageref = useRef();
   const [imagePath, setImagePath] = useState(
     bien.photos.length > 0 ? bien.photos : [{ link: account }]
@@ -100,6 +100,11 @@ export default function EditBien({ bien, allbien, setbien }) {
             });
           })
           .catch((err) => {
+            if(err.response.data.detail === "Could not validate credentials"){
+              setToken("")
+              setTokenType("")
+              localStorage.clear()
+            }
             console.log(err);
             setLoading(false);
 
@@ -111,6 +116,11 @@ export default function EditBien({ bien, allbien, setbien }) {
           });
       })
       .catch((err) => {
+        if(err.response.data.detail === "Could not validate credentials"){
+          setToken("")
+          setTokenType("")
+          localStorage.clear()
+        }
         console.log(err);
         setLoading(false);
 

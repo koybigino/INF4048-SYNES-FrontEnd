@@ -76,6 +76,12 @@ export default function ActionList() {
           shadow={false}
           className="rounded-none h-auto"
         >
+        <div className="flex justify-center shrink-0 flex-col gap-2 sm:flex-row">
+          <CreateActivity
+            allActivites={getActivites}
+            setTableRows={setTableRows}
+          />
+        </div>
           <div className="mb-8 flex items-center justify-between gap-8">
             <div>
               <Typography variant="h5" color="blue-gray">
@@ -102,12 +108,6 @@ export default function ActionList() {
                   Suppression d'une Activité réussit !
                 </AlertSuccess>
               </div>
-            </div>
-            <div className="flex shrink-0 flex-col gap-2 sm:flex-row">
-              <CreateActivity
-                allActivites={getActivites}
-                setTableRows={setTableRows}
-              />
             </div>
           </div>
         </CardHeader>

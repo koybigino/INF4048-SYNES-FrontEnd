@@ -37,8 +37,8 @@ export default function EditSection({ section, allsection, setSection }) {
   const [showAlertSucess, setShowAlertSucess] = useState(false);
   const [showAlertDanger, setShowAlertDanger] = useState(false);
   const [loading, setLoading] = useState(false);
-  const token = useRecoilValue(storeToken);
-  const tokenType = useRecoilValue(storeTokenType);
+  const [token, setToken] = useRecoilState(storeToken);
+  const [tokenType, setTokenType] = useRecoilState(storeTokenType);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -73,6 +73,11 @@ export default function EditSection({ section, allsection, setSection }) {
         }, 5000);
       })
       .catch(() => {
+        if(err.response.data.detail === "Could not validate credentials"){
+          setToken("")
+          setTokenType("")
+          localStorage.clear()
+        }
         setLoading(false);
 
         setShowAlertSucess(true);

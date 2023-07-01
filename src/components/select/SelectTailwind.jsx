@@ -4,7 +4,6 @@ import { Select, Option } from "@material-tailwind/react";
 export default function SelectTailwind({
   options,
   label,
-  value,
   onSelectChange,
 }) {
   return (

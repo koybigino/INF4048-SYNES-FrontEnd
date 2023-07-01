@@ -53,8 +53,8 @@ export default function EditProfile() {
   const [adresse_mail, setEmail] = useState(currentUser.adresse_mail);
   const [showAlertSucess, setShowAlertSucess] = useState(false);
   const [loading, setLoading] = useState(false);
-  const token = useRecoilValue(storeToken);
-  const tokenType = useRecoilValue(storeTokenType);
+  const [token, setToken] = useRecoilState(storeToken);
+  const [tokenType, setTokenType] = useRecoilState(storeTokenType);
   const [showAlertDanger, setShowAlertDanger] = useState(false);
 
   const handleClick = () => {
@@ -97,6 +97,11 @@ export default function EditProfile() {
                 }, 5000);
               })
               .catch((err) => {
+                if(err.response.data.detail === "Could not validate credentials"){
+                  setToken("")
+                  setTokenType("")
+                  localStorage.clear()
+                }
                 console.log(err);
                 setLoading(false);
                 setShowAlertDanger(true);
@@ -107,6 +112,11 @@ export default function EditProfile() {
               });
           })
           .catch((err) => {
+            if(err.response.data.detail === "Could not validate credentials"){
+              setToken("")
+              setTokenType("")
+              localStorage.clear()
+            }
             console.log(err);
             setLoading(false);
             setShowAlertDanger(true);
@@ -117,6 +127,11 @@ export default function EditProfile() {
           });
       })
       .catch((err) => {
+        if(err.response.data.detail === "Could not validate credentials"){
+          setToken("")
+          setTokenType("")
+          localStorage.clear()
+        }
         console.log(err);
         setLoading(false);
         setShowAlertDanger(true);

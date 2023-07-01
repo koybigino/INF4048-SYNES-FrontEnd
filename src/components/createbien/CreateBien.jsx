@@ -43,8 +43,8 @@ export default function CreateBien({ setTableRows, allBiens }) {
   const biens = items.items;
   const sectionNames = useRecoilValue(storeGetAllSectionName);
   const sections = useRecoilValue(storeGetAllSection);
-  const token = useRecoilValue(storeToken);
-  const tokenType = useRecoilValue(storeTokenType);
+  const [token, setToken] = useRecoilState(storeToken);
+  const [tokenType, setTokenType] = useRecoilState(storeTokenType);
   const imageref = useRef();
   const [photos, setPhoto] = useState(new FormData());
   const [imagePath, setImagePath] = useState([{ link: account }]);
@@ -130,11 +130,21 @@ export default function CreateBien({ setTableRows, allBiens }) {
               })
               .catch((err) => {
                 console.log(err);
+                if(err.response.data.detail === "Could not validate credentials"){
+                  setToken("")
+                  setTokenType("")
+                  localStorage.clear()
+                }
               });
           });
         })
         .catch((err) => {
           console.log(err);
+          if(err.response.data.detail === "Could not validate credentials"){
+            setToken("")
+            setTokenType("")
+            localStorage.clear()
+          }
           setLoading(false);
           setShowAlertDanger(true);
 

@@ -31,8 +31,8 @@ export default function CreateCaisse({ setTableRows, allCaisses }) {
   const [showAlertSucess, setShowAlertSucess] = useState(false);
   const [loading, setLoading] = useState(false);
   const [showAlertDanger, setShowAlertDanger] = useState(false);
-  const token = useRecoilValue(storeToken);
-  const tokenType = useRecoilValue(storeTokenType);
+  const [token, setToken] = useRecoilState(storeToken);
+  const [tokenType, setTokenType] = useRecoilState(storeTokenType);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -65,6 +65,11 @@ export default function CreateCaisse({ setTableRows, allCaisses }) {
           }, 5000);
         })
         .catch(() => {
+          if(err.response.data.detail === "Could not validate credentials"){
+            setToken("")
+            setTokenType("")
+            localStorage.clear()
+          }
           setLoading(false);
           setShowAlertDanger(true);
 

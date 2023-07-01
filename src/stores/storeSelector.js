@@ -14,6 +14,9 @@ const fetchData = async (url, token, tokenType) => {
       return res.data;
     })
     .catch((err) => {
+      if (err.response.data.detail === "Could not validate credentials") {
+        localStorage.clear();
+      }
       console.log(err);
       return err;
     });
@@ -96,7 +99,59 @@ export const storeGetAllUserName = selector({
       userNames.push(s.nom);
     });
 
+    console.log(userNames);
+
     return userNames;
+  },
+});
+
+export const storeGetAllSectionUser = selector({
+  key: "get-all-user-name-per-section",
+  get: async ({ get }) => {
+    const Allusers = get(storeGetAllUser);
+    const users = Allusers.items;
+    const sections = get(storeGetAllSectionName);
+    let userSection = [];
+
+    sections.forEach((s) => {
+      const us = [];
+      if(s !== "All") us.push(s);
+      users.forEach((u) => {
+        if (u.etablissement === s) {
+          us.push(u.nom);
+        }
+      });
+
+      if (us.length > 1) {
+        us.forEach((u) => {
+          userSection.push(u);
+        });
+      }
+    });
+
+    return userSection;
+  },
+});
+
+export const storeGetAllUserPerSection = selector({
+  key: "get-all-section-user",
+  get: async ({ get }) => {
+    const Allusers = get(storeGetAllUser);
+    const users = Allusers.items;
+    const sections = get(storeSections);
+    let userSection = {};
+
+    sections.forEach((s) => {
+      const us = [];
+      users.forEach((u) => {
+        if (u.section.nom === s) {
+          us.push(u.nom);
+        }
+      });
+      if(s !== "All" && us.length > 0) userSection[s] = us ;
+    });
+
+    return userSection;
   },
 });
 
