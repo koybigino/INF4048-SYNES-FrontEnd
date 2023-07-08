@@ -14,9 +14,6 @@ const fetchData = async (url, token, tokenType) => {
       return res.data;
     })
     .catch((err) => {
-      if (err.response.data.detail === "Could not validate credentials") {
-        localStorage.clear();
-      }
       console.log(err);
       return err;
     });

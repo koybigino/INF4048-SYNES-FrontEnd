@@ -176,23 +176,11 @@ export default function CreateActivity({ setTableRows, allActivites }) {
               })
               .catch((err) => {
                 console.log(err);
-                if (
-                  err.response.data.detail === "Could not validate credentials"
-                ) {
-                  setToken("");
-                  setTokenType("");
-                  localStorage.clear();
-                }
               });
           });
         })
         .catch((err) => {
           console.log(err);
-          if (err.response.data.detail === "Could not validate credentials") {
-            setToken("");
-            setTokenType("");
-            localStorage.clear();
-          }
           setLoading(false);
           setShowAlertDanger(true);
 

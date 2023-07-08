@@ -117,11 +117,6 @@ export default function CreateUser({ setTableRows, allUsers }) {
           }, 5000);
         })
         .catch((err) => {
-          if(err.response.data.detail === "Could not validate credentials"){
-            setToken("")
-            setTokenType("")
-            localStorage.clear()
-          }
           console.log(err);
           setLoading(false);
           setShowAlertDanger(true);

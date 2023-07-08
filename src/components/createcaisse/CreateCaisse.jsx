@@ -65,11 +65,6 @@ export default function CreateCaisse({ setTableRows, allCaisses }) {
           }, 5000);
         })
         .catch(() => {
-          if(err.response.data.detail === "Could not validate credentials"){
-            setToken("")
-            setTokenType("")
-            localStorage.clear()
-          }
           setLoading(false);
           setShowAlertDanger(true);
 

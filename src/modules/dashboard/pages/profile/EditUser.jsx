@@ -106,11 +106,6 @@ export default function EditUser({ user }) {
         })
         .catch((err) => {
           console.log(err);
-          if(err.response.data.detail === "Could not validate credentials"){
-            setToken("")
-            setTokenType("")
-            localStorage.clear()
-          }
           setLoading(false);
           setShowAlertDanger(true);
 
