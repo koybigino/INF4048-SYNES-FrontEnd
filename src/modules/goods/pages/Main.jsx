@@ -6,9 +6,10 @@ import {
     Typography,
     Button
   } from "@material-tailwind/react";
-import banner from '../../../assets/img/banner.jpg'
 
 export default function Main() {
+
+    
 
     return (
         <>

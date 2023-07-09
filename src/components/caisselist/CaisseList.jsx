@@ -51,11 +51,11 @@ export default function CaisseList() {
   };
 
   const deleteSection = (id) => {
-    deleteData(`/section/${id}`, token, tokenType);
+    deleteData(`/caisse/${id}`, token, tokenType);
 
     setTableRows(null);
 
-    getData("/section/all", token, tokenType).then((res) => {
+    getData("/caisse/all", token, tokenType).then((res) => {
       setTableRows(res.items);
     });
   };
