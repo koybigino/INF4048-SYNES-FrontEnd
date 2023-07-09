@@ -27,6 +27,7 @@ import { deleteData, getData } from "../../config/apiFunctions";
 import SpinnerDashboard from "../spinner/SpinnerDashboard";
 import { storeHeadTableFond, storeToken, storeTokenType } from "../../stores/storeAtoms";
 import { storeGetAllFond } from "../../stores/storeSelector";
+import CreateFond from "../createfond/CreateFond";
 
 export default function FondList() {
   const TABLE_HEAD = useRecoilValue(storeHeadTableFond);
@@ -95,7 +96,7 @@ export default function FondList() {
               </div>
             </div>
             <div className="flex shrink-0 flex-col gap-2 sm:flex-row">
-              <CreateSection
+              <CreateFond
                 allFonds={TABLE_ROWS}
                 setTableRows={setTableRows}
               />
@@ -137,7 +138,7 @@ export default function FondList() {
             {TABLE_ROWS ? (
               <tbody>
                 {TABLE_ROWS.map(
-                  ({ nom, date_creation, etablissement, id }, index) => {
+                  ({ titre, date_creation, createur, id, description, montant, id_caisse }, index) => {
                     const isLast = index === TABLE_ROWS.length - 1;
                     const classes = isLast
                       ? "p-4"
@@ -154,7 +155,7 @@ export default function FondList() {
                                   color="blue-gray"
                                   className="font-normal"
                                 >
-                                  Nom : {nom}
+                                  Nom : {titre}
                                 </Typography>
                                 <Typography
                                   variant="small"
@@ -175,7 +176,7 @@ export default function FondList() {
                                 color="blue-gray"
                                 className="font-normal opacity-70"
                               >
-                                Etablissement : {etablissement}
+                                {createur.nom}
                               </Typography>
                             </div>
                           </Link>
@@ -187,31 +188,51 @@ export default function FondList() {
                               color="blue-gray"
                               className="font-normal"
                             >
+                              {id_caisse}
+                            </Typography>
+                          </Link>
+                        </td>
+                        <td className={classes}>
+                          <Link to="/">
+                            <Typography
+                              variant="small"
+                              color="blue-gray"
+                              className="font-normal"
+                            >
+                              {montant}
+                            </Typography>
+                          </Link>
+                        </td>
+                        <td className={classes}>
+                          <Link to="/">
+                            <Typography
+                              variant="small"
+                              color="blue-gray"
+                              className="font-normal"
+                            >
+                              {description}
+                            </Typography>
+                          </Link>
+                        </td>
+                        <td className={description}>
+                          <Link to="/">
+                            <Typography
+                              variant="small"
+                              color="blue-gray"
+                              className="font-normal"
+                            >
                               {date_creation}
                             </Typography>
                           </Link>
                         </td>
                         <td className={classes}>
-                          <Tooltip content="Modifier">
-                            <EditSection
-                              section={{
-                                nom,
-                                etablissement,
-                                id,
-                              }}
-                              allsection={TABLE_ROWS}
-                              setSection={setTableRows}
-                            />
-                          </Tooltip>
-                        </td>
-                        <td className={classes}>
                           <Tooltip content="Supprimer">
                             <ConfirmDelete
-                              nom={nom}
+                              nom={titre}
                               id={id}
                               deleteElement={deleteSection}
                             >
-                              Voulez vous supprimer la section {nom}
+                              Voulez vous supprimer la section {titre}
                             </ConfirmDelete>
                           </Tooltip>
                         </td>

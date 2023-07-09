@@ -45,10 +45,10 @@ export default function CreateActivity({ setTableRows, allActivites }) {
   const [email_createur, setEmailCreateur] = useState("");
   const [titre, setTitre] = useState("");
   const [lieu, setLieu] = useState("");
-  const [moderateurs, setModerateurs] = useState([]);
-  const [membre_convies, setMembreConvies] = useState([]);
-  const [date_debut, setDateDebut] = useState("");
-  const [date_fin, setDateFin] = useState("");
+  const [moders, setModerateurs] = useState([]);
+  const [mbreConvs, setMembreConvies] = useState([]);
+  const [dd, setDateDebut] = useState("");
+  const [df, setDateFin] = useState("");
   const [heure_debut, setHeureDebut] = useState("");
   const [heure_fin, setHeureFin] = useState("");
 
@@ -71,10 +71,32 @@ export default function CreateActivity({ setTableRows, allActivites }) {
   const [imagePath, setImagePath] = useState([{ link: account }]);
   const [sect, setSection] = useState("");
 
+  const returnUsers = (names) => {
+    const modes = [];
+    for (let i = 0; i < users.length; i++) {
+      const user = users[i];
+      for (let j = 0; j < names.length; j++) {
+        const nom = names[j];
+        if (user.nom === nom) {
+          modes.push({ email: user.adresse_mail, nom: user.nom });
+        }
+      }
+    }
+    console.log(modes);
+    return modes;
+  };
+
+  const returnDate = (d, h) => {
+    const date = `${d}T22:${h}.813Z`;
+    return date;
+  };
+
   const changeImage = (e) => {
     const files = e.target.files;
     const imgs = [];
     const formdata = new FormData();
+
+    console.log(files)
 
     if (files) {
       for (let index = 0; index < files.length; index++) {
@@ -90,12 +112,22 @@ export default function CreateActivity({ setTableRows, allActivites }) {
       }
       setPhoto(formdata);
 
+      console.log(photos)
+
       setImagePath(imgs);
     }
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    setLoading(true);
+    const moderateurs = returnUsers(moders);
+    const membre_convies = returnUsers(mbreConvs);
+
+    const date_debut = returnDate(dd, heure_debut);
+    const date_fin = returnDate(df, heure_fin);
+
     setActivity({
       titre,
       lieu,
@@ -103,9 +135,8 @@ export default function CreateActivity({ setTableRows, allActivites }) {
       membre_convies,
       date_debut,
       date_fin,
-      heure_debut,
-      heure_fin,
     });
+
     console.log({
       titre,
       lieu,
@@ -113,58 +144,47 @@ export default function CreateActivity({ setTableRows, allActivites }) {
       membre_convies,
       date_debut,
       date_fin,
-      heure_debut,
-      heure_fin,
     });
-    /*
-    let section = {};
 
-    for (let i = 0; i < sections.items.length; i++) {
-      const element = sections.items[i];
-
-      if (element.nom === sect) {
-        section = element;
-        break;
-      }
-    }
-
-    setLoading(true);
-
-    console.log({ nom, description, valeur_marchande, section, photos });
-
-    if (nom) {
-      postData("/bien", token, tokenType, {
-        nom,
-        description,
-        valeur_marchande,
-        section,
+    if (moderateurs.length > 0 && membre_convies.length > 0) {
+      postData("/activite", token, tokenType, {
+        titre,
+        lieu,
+        moderateurs,
+        membre_convies,
+        date_debut,
+        date_fin,
       })
         .then(() => {
           setTableRows(null);
 
           getData(
-            `/bien/all?limit=1&offset=${allActivites.length}`,
+            `/activite/all?limit=1&offset=${allActivites.length}`,
             token,
             tokenType
           ).then((res) => {
             console.log(res);
             postData(
-              "/bien/photos/" + res.data.items[0].id,
+              "/activite/photos/" + res.data.items[0].id,
               token,
               tokenType,
               photos
             )
               .then((res) => {
                 console.log(res);
-                getData("/bien/all", token, tokenType).then((res) => {
+                getData("/activite/all", token, tokenType).then((res) => {
                   setLoading(false);
                   console.log(res.data);
                   setTableRows(res.data.items);
 
-                  setNom("");
-                  setDescription("");
-                  setValeur("");
-                  setSection("");
+                  setTitre("");
+                  setLieu("");
+                  setModerateurs([]);
+                  setMembreConvies([]);
+                  setDateDebut("");
+                  setDateFin("");
+                  setHeureDebut("");
+                  setHeureFin("");
                   setPhoto(new FormData());
                   setImagePath([{ link: account }]);
                   setShowAlertSucess(true);
@@ -195,7 +215,7 @@ export default function CreateActivity({ setTableRows, allActivites }) {
       setTimeout(() => {
         setShowAlertDanger(false);
       }, 5000);
-    }*/
+    }
   };
 
   const [open, setOpen] = useState(false);
@@ -204,14 +224,6 @@ export default function CreateActivity({ setTableRows, allActivites }) {
 
   const handleClick = () => {
     imageref.current.click();
-  };
-
-  const setConvie = (e) => {
-    console.log(e);
-  };
-
-  const setModer = (e) => {
-    console.log(e);
   };
 
   return (
@@ -225,10 +237,7 @@ export default function CreateActivity({ setTableRows, allActivites }) {
       <PopoverContent className="w-9/12 flex flex-col justify-center items-center">
         <div className="flex justify-start">
           <Typography variant="h4" color="blue-gray">
-            Planification d'une Activité<br/>
-            {activity && (
-                <code>Activité : {JSON.stringify(activity)}</code>
-            )}
+            Planification d'une Activité
           </Typography>
         </div>
 
@@ -292,7 +301,7 @@ export default function CreateActivity({ setTableRows, allActivites }) {
             </SelectItems>
             <Input
               onChange={(e) => setDateDebut(e.target.value)}
-              value={date_debut}
+              value={dd}
               color="orange"
               size="lg"
               label="Date de début"
@@ -301,7 +310,7 @@ export default function CreateActivity({ setTableRows, allActivites }) {
             />
             <Input
               onChange={(e) => setDateFin(e.target.value)}
-              value={date_fin}
+              value={df}
               color="orange"
               size="lg"
               label="Date de Fin"

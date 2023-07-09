@@ -50,8 +50,8 @@ export default function Finances() {
             </Tab>
           ))}
         </TabsHeader>
-        <TabsBody>
-          {data.map(({ value, desc }) => (
+        <TabsBody className="relative">
+          {data.map(({ value }) => (
             <TabPanel key={value} value={value}>
               {value === "bien" && <Bien />}
               {value === "caisse" && <Caisse />}

@@ -27,6 +27,7 @@ import { deleteData, getData } from "../../config/apiFunctions";
 import SpinnerDashboard from "../spinner/SpinnerDashboard";
 import { storeHeadTableDepense, storeToken, storeTokenType } from "../../stores/storeAtoms";
 import { storeGetAllDepense } from "../../stores/storeSelector";
+import CreateDepense from "../createdepense/CreateDepense";
 
 export default function DepenseList() {
   const TABLE_HEAD = useRecoilValue(storeHeadTableDepense);
@@ -95,7 +96,7 @@ export default function DepenseList() {
               </div>
             </div>
             <div className="flex shrink-0 flex-col gap-2 sm:flex-row">
-              <CreateSection
+              <CreateDepense
                 allDepenses={TABLE_ROWS}
                 setTableRows={setTableRows}
               />
@@ -137,7 +138,7 @@ export default function DepenseList() {
             {TABLE_ROWS ? (
               <tbody>
                 {TABLE_ROWS.map(
-                  ({ nom, date_creation, etablissement, id }, index) => {
+                  ({ createur, date_creation, titre, id, description, id_caisse, montant }, index) => {
                     const isLast = index === TABLE_ROWS.length - 1;
                     const classes = isLast
                       ? "p-4"
@@ -154,7 +155,7 @@ export default function DepenseList() {
                                   color="blue-gray"
                                   className="font-normal"
                                 >
-                                  Nom : {nom}
+                                  Titre : {titre}
                                 </Typography>
                                 <Typography
                                   variant="small"
@@ -175,9 +176,31 @@ export default function DepenseList() {
                                 color="blue-gray"
                                 className="font-normal opacity-70"
                               >
-                                Etablissement : {etablissement}
+                                {createur.email}
                               </Typography>
                             </div>
+                          </Link>
+                        </td>
+                        <td className={classes}>
+                          <Link to="/">
+                            <Typography
+                              variant="small"
+                              color="blue-gray"
+                              className="font-normal"
+                            >
+                              {montant}
+                            </Typography>
+                          </Link>
+                        </td>
+                        <td className={classes}>
+                          <Link to="/">
+                            <Typography
+                              variant="small"
+                              color="blue-gray"
+                              className="font-normal"
+                            >
+                              {description}
+                            </Typography>
                           </Link>
                         </td>
                         <td className={classes}>
@@ -192,26 +215,13 @@ export default function DepenseList() {
                           </Link>
                         </td>
                         <td className={classes}>
-                          <Tooltip content="Modifier">
-                            <EditSection
-                              section={{
-                                nom,
-                                etablissement,
-                                id,
-                              }}
-                              allsection={TABLE_ROWS}
-                              setSection={setTableRows}
-                            />
-                          </Tooltip>
-                        </td>
-                        <td className={classes}>
                           <Tooltip content="Supprimer">
                             <ConfirmDelete
-                              nom={nom}
+                              nom={titre}
                               id={id}
                               deleteElement={deleteSection}
                             >
-                              Voulez vous supprimer la section {nom}
+                              Voulez vous supprimer la section {titre}
                             </ConfirmDelete>
                           </Tooltip>
                         </td>

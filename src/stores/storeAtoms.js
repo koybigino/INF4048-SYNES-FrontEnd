@@ -47,7 +47,7 @@ export const storeHeadTableSections = atom({
 
 export const storeHeadTableActivite = atom({
   key: "head-table-activite",
-  default: ["Activité", "Initiateur", "Modérateurs", "membres conviés", "Durée", "Créer", "", ""],
+  default: ["Activité", "Initiateur", "Modérateurs", "Membres conviés", "Date de début", "Date de fin", "Créer", "", ""],
 });
 
 export const storeHeadTableBien = atom({

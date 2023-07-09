@@ -3,25 +3,22 @@ import {
   Button,
   IconButton,
   Spinner,
-  Alert,
 } from "@material-tailwind/react";
 import React, { useState } from "react";
 import { FiEye, FiEyeOff } from "react-icons/fi";
 // import {Login} from '..'
-import Logo from "../../../../assets/img/logo.png";
 import axios from "../../../../config/axios";
 import { useNavigate } from "react-router-dom";
-import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+import { useSetRecoilState } from "recoil";
 import {
-  storeAllUser,
   storeToken,
   storeTokenType,
-  storeUser,
 } from "../../../../stores/storeAtoms";
 import {
   ExclamationTriangleIcon,
   CheckCircleIcon,
 } from "@heroicons/react/24/solid";
+import Alert from "../../../../components/alert/Alert";
 
 export default function Main() {
   const [password, setPassword] = useState("");
@@ -30,8 +27,8 @@ export default function Main() {
   const [show, setShow] = useState(false);
   const onChange = ({ target }) => setPassword(target.value);
   const navigate = useNavigate();
-  const [token, setToken] = useRecoilState(storeToken);
-  const [tokenType, setTokenType] = useRecoilState(storeTokenType);
+  const setToken = useSetRecoilState(storeToken);
+  const setTokenType = useSetRecoilState(storeTokenType);
   const [showAlertSucess, setShowAlertSucess] = useState(false);
   const [showAlertDanger, setShowAlertDanger] = useState(false);
 

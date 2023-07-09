@@ -27,6 +27,7 @@ import { deleteData, getData } from "../../config/apiFunctions";
 import SpinnerDashboard from "../spinner/SpinnerDashboard";
 import { storeHeadTableContribution, storeToken, storeTokenType } from "../../stores/storeAtoms";
 import { storeGetAllContribution } from "../../stores/storeSelector";
+import CreateContribution from "../createcontribution/CreateContribution";
 
 export default function ContributionList() {
   const TABLE_HEAD = useRecoilValue(storeHeadTableContribution);
@@ -95,7 +96,7 @@ export default function ContributionList() {
               </div>
             </div>
             <div className="flex shrink-0 flex-col gap-2 sm:flex-row">
-              <CreateSection
+              <CreateContribution
                 allContributions={TABLE_ROWS}
                 setTableRows={setTableRows}
               />
@@ -137,7 +138,7 @@ export default function ContributionList() {
             {TABLE_ROWS ? (
               <tbody>
                 {TABLE_ROWS.map(
-                  ({ nom, date_creation, etablissement, id }, index) => {
+                  ({ id_fond, date_creation, email_user, id, montant }, index) => {
                     const isLast = index === TABLE_ROWS.length - 1;
                     const classes = isLast
                       ? "p-4"
@@ -149,13 +150,6 @@ export default function ContributionList() {
                           <Link to="/">
                             <div className="flex items-center gap-3">
                               <div className="flex flex-col">
-                                <Typography
-                                  variant="small"
-                                  color="blue-gray"
-                                  className="font-normal"
-                                >
-                                  Nom : {nom}
-                                </Typography>
                                 <Typography
                                   variant="small"
                                   color="blue-gray"
@@ -175,9 +169,31 @@ export default function ContributionList() {
                                 color="blue-gray"
                                 className="font-normal opacity-70"
                               >
-                                Etablissement : {etablissement}
+                                {email_user}
                               </Typography>
                             </div>
+                          </Link>
+                        </td>
+                        <td className={classes}>
+                          <Link to="/">
+                            <Typography
+                              variant="small"
+                              color="blue-gray"
+                              className="font-normal"
+                            >
+                              {id_fond}
+                            </Typography>
+                          </Link>
+                        </td>
+                        <td className={classes}>
+                          <Link to="/">
+                            <Typography
+                              variant="small"
+                              color="blue-gray"
+                              className="font-normal"
+                            >
+                              {montant}
+                            </Typography>
                           </Link>
                         </td>
                         <td className={classes}>

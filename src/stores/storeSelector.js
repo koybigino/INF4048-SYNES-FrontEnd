@@ -192,6 +192,22 @@ export const storeGetAllFond = selector({
   },
 });
 
+export const storeGetAllFondName = selector({
+  key: "get-all-fond-name",
+  get: async ({ get }) => {
+    const caisses = get(storeGetAllFond);
+    const names = [];
+
+    caisses.items.forEach((s) => {
+      names.push(s.titre);
+    });
+
+    console.log(names);
+
+    return names;
+  },
+});
+
 export const storeGetAllDepense = selector({
   key: "get-all-depense",
   get: async ({ get }) => {
@@ -219,6 +235,22 @@ export const storeGetAllCaisse = selector({
     const tokenType = get(storeTokenType);
 
     return fetchData("/caisse/all", token, tokenType);
+  },
+});
+
+export const storeGetAllCaisseName = selector({
+  key: "get-all-caisse-name",
+  get: async ({ get }) => {
+    const caisses = get(storeGetAllCaisse);
+    const names = [];
+
+    caisses.items.forEach((s) => {
+      names.push(s.nom);
+    });
+
+    console.log(names);
+
+    return names;
   },
 });
 

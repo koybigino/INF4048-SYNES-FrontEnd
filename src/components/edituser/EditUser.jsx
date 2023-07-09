@@ -16,7 +16,10 @@ import {
 } from "@material-tailwind/react";
 import { PencilIcon } from "@heroicons/react/24/outline";
 import { useRecoilState, useRecoilValue } from "recoil";
-import { storeGetAllSectionName } from "../../stores/storeSelector";
+import {
+  storeGetAllSection,
+  storeGetAllSectionName,
+} from "../../stores/storeSelector";
 import Select from "../select/Select";
 import {
   storeAllUser,
@@ -44,6 +47,7 @@ export default function EditUser({ user }) {
   const [showAlertSucess, setShowAlertSucess] = useState(false);
   const [showAlertDanger, setShowAlertDanger] = useState(false);
   const [loading, setLoading] = useState(false);
+  const sections = useRecoilValue(storeGetAllSection);
   const [token, setToken] = useRecoilState(storeToken);
   const [tokenType, setTokenType] = useRecoilState(storeTokenType);
 
@@ -51,7 +55,33 @@ export default function EditUser({ user }) {
     e.preventDefault();
     setLoading(true);
 
+    let id = "";
+
+    for (let i = 0; i < sections.items.length; i++) {
+      const element = sections.items[i];
+
+      console.log(element);
+
+      if (
+        element.nom === etablissement &&
+        etablissement !== user.etablissement
+      ) {
+        id = element.id;
+        break;
+      }
+    }
+
+    console.log(id);
+
     if (etablissement) {
+      postData("user/section/" + user.adresse_mail + "/" + id)
+        .then((res) => {
+          console.log(res);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+
       putData("/user/" + user.adresse_mail, token, tokenType, {
         nom,
         adresse_mail,

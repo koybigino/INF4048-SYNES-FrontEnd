@@ -36,6 +36,7 @@ import { deleteData, getData } from "../../config/apiFunctions";
 import SpinnerDashboard from "../spinner/SpinnerDashboard";
 import AlertSuccess from "../alert/Alert";
 import CreateActivity from "../createactivite/CreateActivity";
+import EditBien from "../editbien/EditBien";
 
 export default function ActionList() {
   const TABLE_HEAD = useRecoilValue(storeHeadTableActivite);
@@ -52,7 +53,7 @@ export default function ActionList() {
     e.preventDefault();
 
     const searchActivites = getActivites.filter((user) => {
-      if (user.nom.includes(e.target.value)) return user;
+      if (user.titre.includes(e.target.value)) return user;
     });
 
     setTableRows(searchActivites);
@@ -149,12 +150,15 @@ export default function ActionList() {
                   (
                     {
                       id,
-                      nom,
-                      description,
-                      valeur_marchande,
-                      section,
-                      photos,
                       date_creation,
+                      titre,
+                      lieu,
+                      date_debut,
+                      date_fin,
+                      createur,
+                      photos,
+                      membre_convies,
+                      moderateurs,
                     },
                     index
                   ) => {
@@ -172,7 +176,7 @@ export default function ActionList() {
                                 {photos.length > 0 ? (
                                   photos.map((p) => (
                                     <Avatar
-                                      src={photos[0].link}
+                                      src={p.link}
                                       alt="avatar"
                                       size="sm"
                                       className="border-2 border-main hover:z-10 focus:z-10"
@@ -194,7 +198,7 @@ export default function ActionList() {
                                   color="blue-gray"
                                   className="font-normal"
                                 >
-                                  Nom : {nom}
+                                  Titre : {titre}
                                 </Typography>
                                 <Typography
                                   variant="small"
@@ -202,6 +206,13 @@ export default function ActionList() {
                                   className="font-normal opacity-70"
                                 >
                                   ID : {id}
+                                </Typography>
+                                <Typography
+                                  variant="small"
+                                  color="blue-gray"
+                                  className="font-normal opacity-70"
+                                >
+                                  Lieu : {lieu}
                                 </Typography>
                               </div>
                             </div>
@@ -215,7 +226,7 @@ export default function ActionList() {
                                 color="blue-gray"
                                 className="font-normal opacity-70"
                               >
-                                description : {description}
+                                {createur.nom} <br /> {createur.email}
                               </Typography>
                             </div>
                           </Link>
@@ -228,7 +239,7 @@ export default function ActionList() {
                                 color="blue-gray"
                                 className="font-normal opacity-70"
                               >
-                                valeur_marchande : {valeur_marchande}
+                                {moderateurs.map(({nom}, i) => (<span key={i}>{nom}, </span>))}
                               </Typography>
                             </div>
                           </Link>
@@ -241,9 +252,31 @@ export default function ActionList() {
                                 color="blue-gray"
                                 className="font-normal opacity-70"
                               >
-                                Section : {section ? section.nom : ""}
+                                {membre_convies.map(({nom}, i) => (<span key={i}>{nom} <br /></span>))}
                               </Typography>
                             </div>
+                          </Link>
+                        </td>
+                        <td className={classes}>
+                          <Link to="/">
+                            <Typography
+                              variant="small"
+                              color="blue-gray"
+                              className="font-normal"
+                            >
+                              {date_debut}
+                            </Typography>
+                          </Link>
+                        </td>
+                        <td className={classes}>
+                          <Link to="/">
+                            <Typography
+                              variant="small"
+                              color="blue-gray"
+                              className="font-normal"
+                            >
+                              {date_fin}
+                            </Typography>
                           </Link>
                         </td>
                         <td className={classes}>
@@ -258,29 +291,13 @@ export default function ActionList() {
                           </Link>
                         </td>
                         <td className={classes}>
-                          <Tooltip content="Modifier">
-                            <EditBien
-                              bien={{
-                                id,
-                                nom,
-                                description,
-                                valeur_marchande,
-                                section,
-                                photos,
-                              }}
-                              allbien={TABLE_ROWS}
-                              setbien={setTableRows}
-                            />
-                          </Tooltip>
-                        </td>
-                        <td className={classes}>
                           <Tooltip content="Supprimer">
                             <ConfirmDelete
-                              nom={nom}
+                              nom={titre}
                               id={id}
                               deleteElement={deleteSection}
                             >
-                              Voulez vous supprimer l'Activité {nom}
+                              Voulez vous supprimer l'Activité {titre}
                             </ConfirmDelete>
                           </Tooltip>
                         </td>
