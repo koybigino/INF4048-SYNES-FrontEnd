@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 //import { Transition } from "react-transition-group";
 import { Outlet } from "react-router-dom";
-// import Logo from '../assets/img/logo 1.png'
+import Logo from '../../assets/img/logo.png'
 import {
   Navbar,
   MobileNav,
@@ -11,7 +11,7 @@ import {
 } from "@material-tailwind/react";
 import { useRecoilValue } from "recoil";
 import { storeToken } from "../../stores/storeAtoms";
-import { HashLink } from "react-router-hash-link";
+import { NavLink } from "react-router-dom";
 import Profile from "../profile/ProfileIcon";
 import NotificationBadge from "../badge/NotificationBadge";
 import { Link } from "react-router-dom";
@@ -36,13 +36,13 @@ export default function NavSamePage({user}) {
       color="blue-gray"
       className="p-1 font-normal"
     >
-      <HashLink
-        to="#activites"
+      <NavLink
+        to="/activites"
         activeClassName="active"
         className="flex items-center transition duration-300 easy-in-out hover:text-aim sm:ml-12"
       >
         Activités
-      </HashLink>
+      </NavLink>
     </Typography>
       <Typography
         as="li"
@@ -50,13 +50,13 @@ export default function NavSamePage({user}) {
         color="blue-gray"
         className="p-1 font-normal"
       >
-        <HashLink
-          to="#biens"
+        <NavLink
+          to="/biens"
           className="flex items-center transition duration-300 easy-in-out hover:text-aim sm:ml-12"
           activeClassName="active"
         >
           biens
-        </HashLink>
+        </NavLink>
       </Typography>
       <Typography
         as="li"
@@ -64,13 +64,13 @@ export default function NavSamePage({user}) {
         color="blue-gray"
         className="p-1 font-normal"
       >
-        <HashLink
-          to="#sections"
+        <NavLink
+          to="/sections"
           className="flex items-center transition duration-300 easy-in-out hover:text-aim sm:ml-12"
           activeClassName="active"
         >
           Sections
-        </HashLink>
+        </NavLink>
       </Typography>
       <Typography
         as="li"
@@ -78,13 +78,13 @@ export default function NavSamePage({user}) {
         color="blue-gray"
         className="p-1 font-normal"
       >
-        <HashLink
-          to="#sanctions"
+        <NavLink
+          to="/sanctions"
           activeClassName="active"
           className="flex items-center transition duration-300 easy-in-out hover:text-aim sm:ml-12"
         >
           Sanctions
-        </HashLink>
+        </NavLink>
       </Typography>
       <Typography
         as="li"
@@ -92,13 +92,13 @@ export default function NavSamePage({user}) {
         color="blue-gray"
         className="p-1 font-normal"
       >
-        <HashLink
-          to="#cotisations"
+        <NavLink
+          to="/cotisations"
           activeClassName="active"
           className="flex items-center transition duration-300 easy-in-out hover:text-aim sm:ml-12"
         >
           Cotisation
-        </HashLink>
+        </NavLink>
       </Typography>
       <Typography
         as="li"
@@ -106,13 +106,13 @@ export default function NavSamePage({user}) {
         color="blue-gray"
         className="p-1 font-normal"
       >
-        <HashLink
-          to="#partenaires"
+        <NavLink
+          to="/partenaires"
           className="flex items-center transition duration-300 easy-in-out hover:text-aim sm:ml-12"
           activeClassName="active"
         >
           Partenaires
-        </HashLink>
+        </NavLink>
       </Typography>
     </ul>
   );
@@ -124,13 +124,12 @@ export default function NavSamePage({user}) {
       >
         <div className="container mx-auto flex items-center justify-between text-blue-gray-900">
           <Typography as="a" href="#" variant="small" className="py-3">
-            <HashLink
+            <NavLink
               to="/"
               className="mr-4 cursor-pointer font-normal flex items-center "
             >
-              {/* <img src={Logo} alt="" className="w-20" /> */}
-              <p className="font-bold text-[#3f6b75] text-lg">Synes</p>
-            </HashLink>
+              <img src={Logo} alt="" className="w-20" />
+            </NavLink>
           </Typography>
           <div className="hidden lg:block">{navList}</div>
           {token ? (

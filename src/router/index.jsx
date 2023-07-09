@@ -16,7 +16,7 @@ import Profile from "../modules/dashboard/pages/profile/Profile";
 import ProtectedRoute from "../navigation/GuardedRoute";
 import AuthRoute from "../navigation/AuthRoute";
 import EditProfile from "../modules/dashboard/pages/profile/EditProfile";
-
+import Home from '../modules/home/pages/Main'
 function Router() {
   const routes = [
     {
@@ -60,11 +60,15 @@ function Router() {
           element: <Traçability />,
         },
         {
-          path: "/goods",
+          path: "/",
+          element: <Home />,
+        },
+        {
+          path: "/biens",
           element: <Goods />,
         },
         {
-          path: "/goods/details",
+          path: "/biens/details",
           element: <Details />,
         },
       ],

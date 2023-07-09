@@ -6,17 +6,20 @@ import {
     Typography,
     Button
   } from "@material-tailwind/react";
-import banner from '../../../assets/img/banner.jpg'
 
 export default function Main() {
+
+    
 
     return (
         <>
             <div className=" h-screen w-screen ">
                 <div className='h-1/2 bg-banner bg-cover bg-blend-overlay bg-center backdrop-blur-sm'>
                     <div className='flex flex-col items-center justify-center h-full text-white'>
-                        <h1 className='text-5xl font-bold'>Welcome to our store</h1>
-                        <p className='text-2xl'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatum.</p>
+                        <h1 className='text-5xl font-bold'>Biens du Synes</h1>
+                        <p className='text-2xl'>
+                            Tout bien du Synes listé contribue à la bonne marche du groupe.
+                            </p>
                     </div>
                     <div className='mt-12 mb-40 space-y-9 flex flex-row mx-auto flex-wrap justify-around w-full px-16'>
 

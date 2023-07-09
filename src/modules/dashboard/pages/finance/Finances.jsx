@@ -42,7 +42,7 @@ export default function Finances() {
       <Typography className="mb-5" variant="h2">
         Gestion des Finances
       </Typography>
-      <Tabs value="finance">
+      <Tabs value="bien">
         <TabsHeader>
           {data.map(({ label, value }) => (
             <Tab key={value} value={value}>

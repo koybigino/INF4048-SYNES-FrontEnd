@@ -3,8 +3,8 @@ import {
   Card,
   Input,
   Typography,
-  Radio,
   Spinner,
+  Textarea
 } from "@material-tailwind/react";
 import {
   ExclamationTriangleIcon,
@@ -26,7 +26,11 @@ import axios from "../../config/axios";
 import { getData, postData } from "../../config/apiFunctions";
 
 export default function CreateCaisse({ setTableRows, allCaisses }) {
-  const [etablissement, setEtablissement] = useState("");
+  const [montant, setMontant] = useState("");
+  const [emal, setEmail]=useState('')
+  const [nom, setNom] = useState('')
+  const [description, setDescription] = useState('')
+
 
   const [showAlertSucess, setShowAlertSucess] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -41,12 +45,15 @@ export default function CreateCaisse({ setTableRows, allCaisses }) {
 
     let caisses = allCaisses;
 
-    caisses = [...caisses, { nom: etablissement, etablissement }];
+    caisses = [...caisses, { nom: montant, montant }];
 
-    if (etablissement) {
-      postData("/caisse", token, tokenType, {
-        nom: etablissement,
-        etablissement,
+    if (montant) {
+      postData("/caisse", token, tokenType, 
+      {
+        email_createur: emal,
+        nom,
+        description,
+        montant_courant: montant
       })
         .then(() => {
           setLoading(false);
@@ -57,7 +64,7 @@ export default function CreateCaisse({ setTableRows, allCaisses }) {
             setTableRows(res.items);
           });
 
-          setEtablissement("");
+          setMontant("");
           setShowAlertSucess(true);
 
           setTimeout(() => {
@@ -94,13 +101,13 @@ export default function CreateCaisse({ setTableRows, allCaisses }) {
         className="flex items-center gap-3"
         size="sm"
       >
-        <UserPlusIcon strokeWidth={2} className="h-4 w-4" /> Ajouter une Section
+        <UserPlusIcon strokeWidth={2} className="h-4 w-4" /> Ajouter une Caisse
       </Button>
       <Dialog open={open} handler={handleOpen}>
         <DialogHeader>
           <div className="flex">
             <Typography variant="h4" color="blue-gray">
-              Création d'une Section
+              Création d'une Caisse
             </Typography>
           </div>
         </DialogHeader>
@@ -111,7 +118,7 @@ export default function CreateCaisse({ setTableRows, allCaisses }) {
             open={showAlertDanger}
             setOpen={setShowAlertDanger}
           >
-            Erreur de creation d'un nouvelle Section !
+            Erreur de creation d'un nouvelle Caisse !
           </Alert>
           <Alert
             color="green"
@@ -119,13 +126,13 @@ export default function CreateCaisse({ setTableRows, allCaisses }) {
             open={showAlertSucess}
             setOpen={setShowAlertSucess}
           >
-            Creation d'un nouvelle Section réussit !
+            Creation d'un nouvelle Caisse réussit !
           </Alert>
         </div>
         <DialogBody className="flex items-center justify-center" divider>
           <Card color="transparent" shadow={false}>
             <Typography color="gray" className="mt-1 font-normal">
-              Entrer les détails pour créer un Section
+              Entrer les détails pour créer un Caisse
             </Typography>
             <form
               onSubmit={handleSubmit}
@@ -133,18 +140,50 @@ export default function CreateCaisse({ setTableRows, allCaisses }) {
             >
               <div className="mb-4 flex  flex-col gap-6">
                 <Input
-                  onChange={(e) => setEtablissement(e.target.value)}
-                  value={etablissement}
+                  onChange={(e) => setEmail(e.target.value)}
+                  value={emal}
+                  type='email'
                   color="orange"
                   size="lg"
-                  label="Etablissement"
+                  label="Email"
+                  required
+                />
+              </div>
+              <div className="mb-4 flex  flex-col gap-6">
+                <Input
+                  onChange={(e) => setNom(e.target.value)}
+                  value={nom}
+                  color="orange"
+                  size="lg"
+                  label="Nom"
+                  required
+                />
+              </div>
+              <div className="mb-4 flex  flex-col gap-6">
+                <Input
+                  onChange={(e) => setMontant(e.target.value)}
+                  value={montant}
+                  type='number'
+                  color="orange"
+                  size="lg"
+                  label="Montant"
+                  required
+                />
+              </div>
+              <div className="mb-4 flex  flex-col gap-6">
+                <Textarea
+                  onChange={(e) => setDescription(e.target.value)}
+                  value={description}
+                  color="orange"
+                  size="lg"
+                  label="Description"
                   required
                 />
               </div>
               <Button
                 type="submit"
                 color="orange"
-                className="mt-6 bg-main  flex justify-center gap-10"
+                className="mt-6 bg-main flex justify-center gap-10"
                 fullWidth
               >
                 Créer {loading && <Spinner color="amber" />}

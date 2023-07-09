@@ -32,7 +32,7 @@ export class ThumbnailsExample extends React.Component<{}> {
   renderSlides(): ReactNode[] {
     return generateSlides().map( slide => (
       <SplideSlide key={ slide.src }>
-        <img src={ slide.src } alt={ slide.alt } className={ slide.className }/>
+        <img src={ slide.src } alt={ slide.alt }/>
       </SplideSlide>
     ) );
   }
@@ -68,7 +68,7 @@ export class ThumbnailsExample extends React.Component<{}> {
       <div className="wrapper">
         <h2 id="thumbnail-slider-example">Thumbnail Slider</h2>
 
-        <Splide
+        {/* <Splide
           options={ mainOptions }
           ref={ this.mainRef }
           aria-labelledby="thumbnail-slider-example"
@@ -82,7 +82,7 @@ export class ThumbnailsExample extends React.Component<{}> {
           aria-label="The carousel with thumbnails. Selecting a thumbnail will change the main carousel"
         >
           { this.renderSlides() }
-        </Splide>
+        </Splide> */}
       </div>
     );
   }

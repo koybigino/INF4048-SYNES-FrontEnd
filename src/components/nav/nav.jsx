@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import Profile from "../profile/ProfileIcon";
 import { Outlet, Link, NavLink } from "react-router-dom";
-// import Logo from '../assets/img/logo 1.png'
+import Logo from '../../assets/img/logo.png'
 import {
   Navbar,
   MobileNav,
@@ -132,8 +132,7 @@ export default function Nav({user}) {
               to="/"
               className="mr-4 cursor-pointer font-normal flex items-center "
             >
-              {/* <img src={Logo} alt="" className="w-20" /> */}
-              <p className="font-bold text-[#3f6b75] text-lg">Synes</p>
+              <img src={Logo} alt="" className="w-20" />
             </Link>
           </Typography>
           <div className="hidden lg:block">{navList}</div>
