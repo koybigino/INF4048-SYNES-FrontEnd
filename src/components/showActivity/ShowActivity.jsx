@@ -4,37 +4,39 @@ import {
   CardBody,
   CardFooter,
   Typography,
-  Button,
-  Avatar,
 } from "@material-tailwind/react";
 import { useRecoilValue } from "recoil";
-import { storeGetAllBiens } from "../../../stores/storeSelector";
-import BienDetail from "../../../components/biendetails/BienDetails";
+import { storeGetAllActivite } from "../../stores/storeSelector";
+import BienDetail from "../biendetails/BienDetails";
+import ActivityDetails from "../biendetails/ActivityDetails";
 
-export default function Main() {
-  const items = useRecoilValue(storeGetAllBiens);
-  const biens = items.items;
+export default function ShowActivity() {
+  const items = useRecoilValue(storeGetAllActivite);
+  const activites = items.items;
   return (
     <>
       <div className=" h-screen w-screen ">
         <div className="h-1/2 bg-banner bg-cover bg-blend-overlay bg-center backdrop-blur-sm">
           <div className="flex flex-col items-center justify-center h-full text-white">
-            <h1 className="text-5xl font-bold">Biens du Synes</h1>
+            <h1 className="text-5xl font-bold">Activités du Synes</h1>
             <p className="text-2xl">
-              Tout bien du Synes listé contribue à la bonne marche du groupe.
+              Toute Activité du Synes listé contribue à la bonne marche du groupe.
             </p>
           </div>
           <div className="mt-12 mb-40 gap-10 grid grid-cols-1 lg:grid-cols-2 justify-center items-center w-full p-16">
-            {biens.map(
+            {activites.map(
               (
                 {
                   id,
-                  nom,
-                  description,
-                  valeur_marchande,
-                  section,
-                  photos,
                   date_creation,
+                  titre,
+                  lieu,
+                  date_debut,
+                  date_fin,
+                  createur,
+                  photos,
+                  membre_convies,
+                  moderateurs,
                 },
                 index
               ) => {
@@ -58,25 +60,28 @@ export default function Main() {
                           color="blue-gray"
                           className="mb-2"
                         >
-                          Nom : {nom}
+                          Titre : {titre}
                         </Typography>
                         <Typography>
-                          Valeur marchante : {valeur_marchande}
+                          Lieux : {lieu}
                         </Typography>
                         <Typography>
-                          Date d'obtention : {date_creation}
+                          Date  : {date_fin}
                         </Typography>
                       </CardBody>
                       <CardFooter className="pt-0 mt-0">
-                        <BienDetail
-                          bien={{
+                        <ActivityDetails
+                          activite={{
                             id,
-                            nom,
-                            description,
-                            valeur_marchande,
-                            section,
-                            photos,
                             date_creation,
+                            titre,
+                            lieu,
+                            date_debut,
+                            date_fin,
+                            createur,
+                            photos,
+                            membre_convies,
+                            moderateurs,
                           }}
                         />
                       </CardFooter>

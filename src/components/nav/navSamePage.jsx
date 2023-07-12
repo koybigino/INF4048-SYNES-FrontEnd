@@ -58,62 +58,6 @@ export default function NavSamePage({user}) {
           biens
         </NavLink>
       </Typography>
-      <Typography
-        as="li"
-        variant="small"
-        color="blue-gray"
-        className="p-1 font-normal"
-      >
-        <NavLink
-          to="/sections"
-          className="flex items-center transition duration-300 easy-in-out hover:text-aim sm:ml-12"
-          activeClassName="active"
-        >
-          Sections
-        </NavLink>
-      </Typography>
-      <Typography
-        as="li"
-        variant="small"
-        color="blue-gray"
-        className="p-1 font-normal"
-      >
-        <NavLink
-          to="/sanctions"
-          activeClassName="active"
-          className="flex items-center transition duration-300 easy-in-out hover:text-aim sm:ml-12"
-        >
-          Sanctions
-        </NavLink>
-      </Typography>
-      <Typography
-        as="li"
-        variant="small"
-        color="blue-gray"
-        className="p-1 font-normal"
-      >
-        <NavLink
-          to="/cotisations"
-          activeClassName="active"
-          className="flex items-center transition duration-300 easy-in-out hover:text-aim sm:ml-12"
-        >
-          Cotisation
-        </NavLink>
-      </Typography>
-      <Typography
-        as="li"
-        variant="small"
-        color="blue-gray"
-        className="p-1 font-normal"
-      >
-        <NavLink
-          to="/partenaires"
-          className="flex items-center transition duration-300 easy-in-out hover:text-aim sm:ml-12"
-          activeClassName="active"
-        >
-          Partenaires
-        </NavLink>
-      </Typography>
     </ul>
   );
 

@@ -52,7 +52,7 @@ export const storeHeadTableActivite = atom({
 
 export const storeHeadTableBien = atom({
   key: "head-table-bien",
-  default: ["Bien", "Section", "Créer", "Description", "Valeur Marchante", "Créer", "", ""],
+  default: ["Bien", "Section", "Description", "Valeur Marchante", "Créer", "", ""],
 });
 
 export const storeHeadTableCaisse = atom({
@@ -62,7 +62,7 @@ export const storeHeadTableCaisse = atom({
 
 export const storeHeadTableContribution = atom({
   key: "head-table-contribution",
-  default: ["Contribution", "User", "Fond", "Montant", "Créer", "", ""],
+  default: ["Contributeur", "Fond", "Montant", "Créer", "", ""],
 });
 
 export const storeHeadTableDepense = atom({
@@ -75,9 +75,9 @@ export const storeHeadTableFond = atom({
   default: ["Fond", "Initiateur", "Caisse", "Montant", "Description", "Créer", "", ""],
 });
 
-export const storeHeadTableNotification = atom({
+export const storeHeadTableNotifications = atom({
   key: "head-table-notification",
-  default: ["Notification", "Entité", "Contenu", "Créer", "", ""],
+  default: ["Notification", "Sujet", "Contenu", "Lien Associé", "Créer"],
 });
 
 export const storeHeadTableAction = atom({

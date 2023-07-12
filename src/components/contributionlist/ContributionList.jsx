@@ -21,30 +21,69 @@ import {
   CheckCircleIcon,
 } from "@heroicons/react/24/solid";
 import { useEffect, useState } from "react";
-import EditSection from "../editsection/EditSection";
-import CreateSection from "../createsection/CreateSection";
 import { deleteData, getData } from "../../config/apiFunctions";
 import SpinnerDashboard from "../spinner/SpinnerDashboard";
-import { storeHeadTableContribution, storeToken, storeTokenType } from "../../stores/storeAtoms";
-import { storeGetAllContribution } from "../../stores/storeSelector";
+import {
+  storeHeadTableContribution,
+  storeToken,
+  storeTokenType,
+} from "../../stores/storeAtoms";
+import { storeGetAllFond } from "../../stores/storeSelector";
 import CreateContribution from "../createcontribution/CreateContribution";
 
 export default function ContributionList() {
   const TABLE_HEAD = useRecoilValue(storeHeadTableContribution);
-  const items = useRecoilValue(storeGetAllContribution);
-  const getContributions = items.items;
 
-  const [TABLE_ROWS, setTableRows] = useState(getContributions);
+  const [TABLE_ROWS, setTableRows] = useState(null);
   const [showAlertSucess, setShowAlertSucess] = useState(false);
   const [showAlertDanger, setShowAlertDanger] = useState(false);
+  const fonds = useRecoilValue(storeGetAllFond);
   const token = useRecoilValue(storeToken);
   const tokenType = useRecoilValue(storeTokenType);
+
+  useEffect(() => {
+    const contribus = [];
+
+    for (let i = 0; i < fonds.items.length; i++) {
+      const element = fonds.items[i];
+
+      if (i === fonds.items.length - 1) {
+        getData("/contribution/" + element.id, token, tokenType)
+          .then((res) => {
+            console.log(res);
+            if (res?.data?.items.length > 0) {
+              res.data.items.forEach((i) => {
+                contribus.push(i);
+              });
+              setTableRows(contribus);
+            }
+          })
+          .catch((e) => {
+            console.log(e);
+          });
+      } else {
+        getData("/contribution/" + element.id, token, tokenType)
+          .then((res) => {
+            if (res?.data?.items.length > 0) {
+              res.data.items.forEach((i) => {
+                contribus.push(i);
+              });
+            }
+          })
+          .catch((e) => {
+            console.log(e);
+          });
+      }
+    }
+  }, []);
 
   const handleChange = (e) => {
     e.preventDefault();
 
+    console.log(getContributions);
+
     const searchContributions = getContributions.filter((user) => {
-      if (user.nom.includes(e.target.value)) return user;
+      if (user.email_user.includes(e.target.value)) return user;
     });
 
     setTableRows(searchContributions);
@@ -138,7 +177,7 @@ export default function ContributionList() {
             {TABLE_ROWS ? (
               <tbody>
                 {TABLE_ROWS.map(
-                  ({ id_fond, date_creation, email_user, id, montant }, index) => {
+                  ({ email_user, date_creation, id_fond, montant }, index) => {
                     const isLast = index === TABLE_ROWS.length - 1;
                     const classes = isLast
                       ? "p-4"
@@ -146,21 +185,6 @@ export default function ContributionList() {
 
                     return (
                       <tr key={index}>
-                        <td className={classes}>
-                          <Link to="/">
-                            <div className="flex items-center gap-3">
-                              <div className="flex flex-col">
-                                <Typography
-                                  variant="small"
-                                  color="blue-gray"
-                                  className="font-normal opacity-70"
-                                >
-                                  ID : {id}
-                                </Typography>
-                              </div>
-                            </div>
-                          </Link>
-                        </td>
                         <td className={classes}>
                           <Link to="/">
                             <div className="w-max">
@@ -176,13 +200,17 @@ export default function ContributionList() {
                         </td>
                         <td className={classes}>
                           <Link to="/">
-                            <Typography
-                              variant="small"
-                              color="blue-gray"
-                              className="font-normal"
-                            >
-                              {id_fond}
-                            </Typography>
+                            <div className="flex items-center gap-3">
+                              <div className="flex flex-col">
+                                <Typography
+                                  variant="small"
+                                  color="blue-gray"
+                                  className="font-normal opacity-70"
+                                >
+                                  {id_fond}
+                                </Typography>
+                              </div>
+                            </div>
                           </Link>
                         </td>
                         <td className={classes}>
@@ -208,26 +236,13 @@ export default function ContributionList() {
                           </Link>
                         </td>
                         <td className={classes}>
-                          <Tooltip content="Modifier">
-                            <EditSection
-                              section={{
-                                nom,
-                                etablissement,
-                                id,
-                              }}
-                              allsection={TABLE_ROWS}
-                              setSection={setTableRows}
-                            />
-                          </Tooltip>
-                        </td>
-                        <td className={classes}>
                           <Tooltip content="Supprimer">
                             <ConfirmDelete
-                              nom={nom}
-                              id={id}
+                              nom={id_fond}
+                              id={id_fond}
                               deleteElement={deleteSection}
                             >
-                              Voulez vous supprimer la section {nom}
+                              Voulez vous supprimer la contribution {id_fond}
                             </ConfirmDelete>
                           </Tooltip>
                         </td>

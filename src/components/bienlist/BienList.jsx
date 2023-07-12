@@ -207,7 +207,7 @@ export default function BienList() {
                                 color="blue-gray"
                                 className="font-normal opacity-70"
                               >
-                                description : {description}
+                                {section?.nom}
                               </Typography>
                             </div>
                           </Link>
@@ -220,7 +220,7 @@ export default function BienList() {
                                 color="blue-gray"
                                 className="font-normal opacity-70"
                               >
-                                valeur_marchande : {valeur_marchande}
+                                {description}
                               </Typography>
                             </div>
                           </Link>
@@ -233,7 +233,7 @@ export default function BienList() {
                                 color="blue-gray"
                                 className="font-normal opacity-70"
                               >
-                                Section : {section ? section.nom : ""}
+                                {valeur_marchande}
                               </Typography>
                             </div>
                           </Link>

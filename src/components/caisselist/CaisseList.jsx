@@ -138,7 +138,7 @@ export default function CaisseList() {
             {TABLE_ROWS ? (
               <tbody>
                 {TABLE_ROWS.map(
-                  ({ nom, date_creation, etablissement, id }, index) => {
+                  ({ nom, date_creation, createur, id, description, montant_courant }, index) => {
                     const isLast = index === TABLE_ROWS.length - 1;
                     const classes = isLast
                       ? "p-4"
@@ -176,7 +176,33 @@ export default function CaisseList() {
                                 color="blue-gray"
                                 className="font-normal opacity-70"
                               >
-                                Etablissement : {etablissement}
+                                {createur.email}
+                              </Typography>
+                            </div>
+                          </Link>
+                        </td>
+                        <td className={classes}>
+                          <Link to="/">
+                            <div className="w-max">
+                              <Typography
+                                variant="small"
+                                color="blue-gray"
+                                className="font-normal opacity-70"
+                              >
+                                {montant_courant}
+                              </Typography>
+                            </div>
+                          </Link>
+                        </td>
+                        <td className={classes}>
+                          <Link to="/">
+                            <div className="w-max">
+                              <Typography
+                                variant="small"
+                                color="blue-gray"
+                                className="font-normal opacity-70"
+                              >
+                                {description}
                               </Typography>
                             </div>
                           </Link>
@@ -191,19 +217,6 @@ export default function CaisseList() {
                               {date_creation}
                             </Typography>
                           </Link>
-                        </td>
-                        <td className={classes}>
-                          <Tooltip content="Modifier">
-                            <EditSection
-                              section={{
-                                nom,
-                                etablissement,
-                                id,
-                              }}
-                              allsection={TABLE_ROWS}
-                              setSection={setTableRows}
-                            />
-                          </Tooltip>
                         </td>
                         <td className={classes}>
                           <Tooltip content="Supprimer">

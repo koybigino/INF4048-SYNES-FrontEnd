@@ -58,7 +58,7 @@ export default function Main() {
         localStorage.setItem("userToken", access_token);
         localStorage.setItem("userTokenType", token_type);
         setLoading(false);
-        navigate("/dashboard/users");
+        navigate("/");
         return res.data;
       })
       .catch((err) => {

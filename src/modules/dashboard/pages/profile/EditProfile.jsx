@@ -9,13 +9,11 @@ import { useRecoilState, useRecoilValue } from "recoil";
 import {
   Card,
   Input,
-  Checkbox,
   Button,
   Typography,
   Spinner,
 } from "@material-tailwind/react";
 import {
-  storeEtablissements,
   storeGetAllSectionName,
   storeUserGet,
 } from "../../../../stores/storeSelector";
@@ -27,18 +25,15 @@ import {
   CheckCircleIcon,
 } from "@heroicons/react/24/solid";
 import account from "../../../../assets/img/account.png";
-import axios from "../../../../config/axios";
 import { putData } from "../../../../config/apiFunctions";
 
 export default function EditProfile() {
   const currentUser = useRecoilValue(storeUserGet);
-  const [user, setCurrentuser] = useRecoilState(storeUser);
   const imageref = useRef();
   const [imagePath, setImagePath] = useState(
     currentUser.photo ? currentUser.photo.image_link : ""
   );
   const [photo, setPhoto] = useState(new FormData());
-  let schools = useRecoilValue(storeEtablissements);
   let etablissements = useRecoilValue(storeGetAllSectionName);
   const [etablissement, setEtablissement] = useState(currentUser.etablissement);
   const [sexe, setSexe] = useState(currentUser.sexe);

@@ -24,7 +24,13 @@ import { storeToken, storeTokenType } from "../../stores/storeAtoms";
 import Alert from "../alert/Alert";
 import { getData, postData } from "../../config/apiFunctions";
 import SelectTailwind from "../select/SelectTailwind";
-import { storeGetAllCaisseName, storeGetAllFond, storeGetAllFondName, storeGetAllUser, storeGetAllUserName } from "../../stores/storeSelector";
+import {
+  storeGetAllCaisseName,
+  storeGetAllFond,
+  storeGetAllFondName,
+  storeGetAllUser,
+  storeGetAllUserName,
+} from "../../stores/storeSelector";
 
 export default function CreateContribution({ setTableRows, allSections }) {
   const [montant, setMontant] = useState("");
@@ -42,7 +48,7 @@ export default function CreateContribution({ setTableRows, allSections }) {
   const users = usersItems.items;
   const [tokenType, setTokenType] = useRecoilState(storeTokenType);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     setLoading(true);
@@ -67,27 +73,57 @@ export default function CreateContribution({ setTableRows, allSections }) {
         break;
       }
     }
-   
 
-    console.log(id_fond, email_user)
+    console.log(id_fond, email_user);
 
     if (id_fond && email_user) {
       postData("/contribution", token, tokenType, {
-        id_fond,
+        id_fond: parseInt(id_fond),
         email_user,
         montant,
       })
         .then((r) => {
-            console.log(r)
+          console.log(r);
           setLoading(false);
 
           setTableRows(null);
 
-          getData("/contribution/all", token, tokenType).then((res) => {
-            setTableRows(res.data.items);
-          });
+          const contribus = [];
 
-          setEtablissement("");
+          for (let i = 0; i < fonds.items.length; i++) {
+            const element = fonds.items[i];
+
+            if (i === fonds.items.length - 1) {
+              getData("/contribution/" + element.id, token, tokenType)
+                .then((res) => {
+                  console.log(res);
+                  if (res?.data?.items.length > 0) {
+                    res.data.items.forEach((i) => {
+                      contribus.push(i);
+                    });
+                    setTableRows(contribus);
+                  }
+                })
+                .catch((e) => {
+                  console.log(e);
+                });
+            } else {
+              getData("/contribution/" + element.id, token, tokenType)
+                .then((res) => {
+                  if (res?.data?.items.length > 0) {
+                    res.data.items.forEach((i) => {
+                      contribus.push(i);
+                    });
+                  }
+                })
+                .catch((e) => {
+                  console.log(e);
+                });
+            }
+          }
+
+          setMontant("");
+
           setShowAlertSucess(true);
 
           setTimeout(() => {
@@ -95,7 +131,7 @@ export default function CreateContribution({ setTableRows, allSections }) {
           }, 5000);
         })
         .catch((e) => {
-            console.log(e)
+          console.log(e);
           setLoading(false);
           setShowAlertDanger(true);
 
@@ -125,7 +161,8 @@ export default function CreateContribution({ setTableRows, allSections }) {
         className="flex items-center gap-3"
         size="sm"
       >
-        <UserPlusIcon strokeWidth={2} className="h-4 w-4" /> Ajouter une Contribution
+        <UserPlusIcon strokeWidth={2} className="h-4 w-4" /> Ajouter une
+        Contribution
       </Button>
       <Dialog open={open} handler={handleOpen}>
         <DialogHeader>

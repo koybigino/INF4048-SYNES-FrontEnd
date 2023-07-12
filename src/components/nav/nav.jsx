@@ -73,36 +73,10 @@ export default function Nav({user}) {
         className="p-1 font-normal"
       >
         <NavLink
-          to="/dashboard/sanctions"
-          className="flex items-center transition duration-300 easy-in-out hover:text-aim sm:ml-12"
-        >
-          Sanctions
-        </NavLink>
-      </Typography>
-      <Typography
-        as="li"
-        variant="small"
-        color="blue-gray"
-        className="p-1 font-normal"
-      >
-        <NavLink
           to="/dashboard/traçabilites"
           className="flex items-center transition duration-300 easy-in-out hover:text-aim sm:ml-12"
         >
           Traçabilité
-        </NavLink>
-      </Typography>
-      <Typography
-        as="li"
-        variant="small"
-        color="blue-gray"
-        className="p-1 font-normal"
-      >
-        <NavLink
-          to="/dashboard/droits"
-          className="flex items-center transition duration-300 easy-in-out hover:text-aim sm:ml-12"
-        >
-          Droits
         </NavLink>
       </Typography>
       <Typography

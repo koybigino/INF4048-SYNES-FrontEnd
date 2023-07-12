@@ -19,7 +19,7 @@ import ConfirmDelete from "../confirm/ConfirmDelete";
 import { Link } from "react-router-dom";
 import { useRecoilState, useRecoilValue } from "recoil";
 import {
-  storeHeadTableSections,
+  storeHeadTableNotifications,
   storeToken,
   storeTokenType,
 } from "../../stores/storeAtoms";
@@ -28,7 +28,7 @@ import {
   CheckCircleIcon,
 } from "@heroicons/react/24/solid";
 import { useEffect, useState } from "react";
-import { storeGetAllSection } from "../../stores/storeSelector";
+import { storeGetAllNotification } from "../../stores/storeSelector";
 import EditSection from "../editsection/EditSection";
 import CreateSection from "../createsection/CreateSection";
 import UserFilter from "../usersfilter/UserFilter";
@@ -36,11 +36,11 @@ import { deleteData, getData } from "../../config/apiFunctions";
 import SpinnerDashboard from "../spinner/SpinnerDashboard";
 
 export default function NotificationList() {
-  const TABLE_HEAD = useRecoilValue(storeHeadTableSections);
-  const items = useRecoilValue(storeGetAllSection);
-  const getSections = items.items;
+  const TABLE_HEAD = useRecoilValue(storeHeadTableNotifications);
+  const items = useRecoilValue(storeGetAllNotification);
+  const getNotifications = items.items;
 
-  const [TABLE_ROWS, setTableRows] = useState(getSections);
+  const [TABLE_ROWS, setTableRows] = useState(getNotifications);
   const [showAlertSucess, setShowAlertSucess] = useState(false);
   const [showAlertDanger, setShowAlertDanger] = useState(false);
   const token = useRecoilValue(storeToken);
@@ -49,11 +49,11 @@ export default function NotificationList() {
   const handleChange = (e) => {
     e.preventDefault();
 
-    const searchSections = getSections.filter((user) => {
+    const searchNotifications = getNotifications.filter((user) => {
       if (user.nom.includes(e.target.value)) return user;
     });
 
-    setTableRows(searchSections);
+    setTableRows(searchNotifications);
   };
 
   const deleteSection = (id) => {
@@ -77,10 +77,10 @@ export default function NotificationList() {
           <div className="mb-8 flex items-center justify-between gap-8">
             <div>
               <Typography variant="h5" color="blue-gray">
-                Liste des Sections
+                Liste des Notifications
               </Typography>
               <Typography color="gray" className="mt-1 font-normal">
-                Voir les informations sur les différents Sections
+                Voir les informations sur les différents Notifications
               </Typography>
               <div className="mx-10 mb-2">
                 <Alert
@@ -89,7 +89,7 @@ export default function NotificationList() {
                   open={showAlertDanger}
                   setOpen={setShowAlertDanger}
                 >
-                  Erreur lors de la supression du Section !
+                  Erreur lors de la supression de la Notification !
                 </Alert>
                 <Alert
                   color="green"
@@ -97,13 +97,13 @@ export default function NotificationList() {
                   open={showAlertSucess}
                   setOpen={setShowAlertSucess}
                 >
-                  Suppression du Section réussit !
+                  Suppression de la Notification réussit !
                 </Alert>
               </div>
             </div>
             <div className="flex shrink-0 flex-col gap-2 sm:flex-row">
               <CreateSection
-                allSections={TABLE_ROWS}
+                allNotifications={TABLE_ROWS}
                 setTableRows={setTableRows}
               />
             </div>

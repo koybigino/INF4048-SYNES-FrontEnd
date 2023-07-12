@@ -112,7 +112,7 @@ export const storeGetAllSectionUser = selector({
 
     sections.forEach((s) => {
       const us = [];
-      if(s !== "All") us.push(s);
+      if (s !== "All") us.push(s);
       users.forEach((u) => {
         if (u.etablissement === s) {
           us.push(u.nom);
@@ -145,7 +145,7 @@ export const storeGetAllUserPerSection = selector({
           us.push(u.nom);
         }
       });
-      if(s !== "All" && us.length > 0) userSection[s] = us ;
+      if (s !== "All" && us.length > 0) userSection[s] = us;
     });
 
     return userSection;
@@ -218,15 +218,6 @@ export const storeGetAllDepense = selector({
   },
 });
 
-export const storeGetAllContribution = selector({
-  key: "get-all-contribution",
-  get: async ({ get }) => {
-    const token = get(storeToken);
-    const tokenType = get(storeTokenType);
-
-    return fetchData("/contribution/all", token, tokenType);
-  },
-});
 
 export const storeGetAllCaisse = selector({
   key: "get-all-caisse",

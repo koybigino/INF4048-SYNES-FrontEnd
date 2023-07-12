@@ -1,5 +1,4 @@
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
-import account from "../../assets/img/account.png";
 import {
   Card,
   CardHeader,
@@ -8,62 +7,30 @@ import {
   Button,
   CardBody,
   CardFooter,
-  Avatar,
-  Tooltip,
-  Spinner,
-  Alert,
 } from "@material-tailwind/react";
-import CreateUser from "../createuser/CreateUser";
-import EditUser from "../edituser/EditUser";
-import ConfirmDelete from "../confirm/ConfirmDelete";
 import { Link } from "react-router-dom";
-import { useRecoilState, useRecoilValue } from "recoil";
-import {
-  storeHeadTableSections,
-  storeToken,
-  storeTokenType,
-} from "../../stores/storeAtoms";
-import {
-  ExclamationTriangleIcon,
-  CheckCircleIcon,
-} from "@heroicons/react/24/solid";
-import { useEffect, useState } from "react";
-import { storeGetAllSection } from "../../stores/storeSelector";
-import EditSection from "../editsection/EditSection";
+import { useRecoilValue } from "recoil";
+import { storeHeadTableNotifications } from "../../stores/storeAtoms";
+import { useState } from "react";
+import { storeGetAllNotification } from "../../stores/storeSelector";
 import CreateSection from "../createsection/CreateSection";
-import UserFilter from "../usersfilter/UserFilter";
-import { deleteData, getData } from "../../config/apiFunctions";
 import SpinnerDashboard from "../spinner/SpinnerDashboard";
 
 export default function ActionList() {
-  const TABLE_HEAD = useRecoilValue(storeHeadTableSections);
-  const items = useRecoilValue(storeGetAllSection);
-  const getSections = items.items;
+  const TABLE_HEAD = useRecoilValue(storeHeadTableNotifications);
+  const items = useRecoilValue(storeGetAllNotification);
+  const getNotifications = items.items;
 
-  const [TABLE_ROWS, setTableRows] = useState(getSections);
-  const [showAlertSucess, setShowAlertSucess] = useState(false);
-  const [showAlertDanger, setShowAlertDanger] = useState(false);
-  const token = useRecoilValue(storeToken);
-  const tokenType = useRecoilValue(storeTokenType);
+  const [TABLE_ROWS, setTableRows] = useState(getNotifications);
 
   const handleChange = (e) => {
     e.preventDefault();
 
-    const searchSections = getSections.filter((user) => {
-      if (user.nom.includes(e.target.value)) return user;
+    const searchNotifications = getNotifications.filter((user) => {
+      if (user.type.includes(e.target.value)) return user;
     });
 
-    setTableRows(searchSections);
-  };
-
-  const deleteSection = (id) => {
-    deleteData(`/section/${id}`, token, tokenType);
-
-    setTableRows(null);
-
-    getData("/section/all", token, tokenType).then((res) => {
-      setTableRows(res.items);
-    });
+    setTableRows(searchNotifications);
   };
 
   return (
@@ -77,35 +44,11 @@ export default function ActionList() {
           <div className="mb-8 flex items-center justify-between gap-8">
             <div>
               <Typography variant="h5" color="blue-gray">
-                Liste des Sections
+                Liste des Notifications
               </Typography>
               <Typography color="gray" className="mt-1 font-normal">
-                Voir les informations sur les différents Sections
+                Voir les informations sur les différents Notifications
               </Typography>
-              <div className="mx-10 mb-2">
-                <Alert
-                  color="red"
-                  icon={<ExclamationTriangleIcon className="h-6 w-6" />}
-                  open={showAlertDanger}
-                  setOpen={setShowAlertDanger}
-                >
-                  Erreur lors de la supression du Section !
-                </Alert>
-                <Alert
-                  color="green"
-                  icon={<CheckCircleIcon className="mt-px h-6 w-6" />}
-                  open={showAlertSucess}
-                  setOpen={setShowAlertSucess}
-                >
-                  Suppression du Section réussit !
-                </Alert>
-              </div>
-            </div>
-            <div className="flex shrink-0 flex-col gap-2 sm:flex-row">
-              <CreateSection
-                allSections={TABLE_ROWS}
-                setTableRows={setTableRows}
-              />
             </div>
           </div>
         </CardHeader>
@@ -144,7 +87,10 @@ export default function ActionList() {
             {TABLE_ROWS ? (
               <tbody>
                 {TABLE_ROWS.map(
-                  ({ nom, date_creation, etablissement, id }, index) => {
+                  (
+                    { sujet, date_creation, contenu, id, lien_associe, type },
+                    index
+                  ) => {
                     const isLast = index === TABLE_ROWS.length - 1;
                     const classes = isLast
                       ? "p-4"
@@ -161,7 +107,7 @@ export default function ActionList() {
                                   color="blue-gray"
                                   className="font-normal"
                                 >
-                                  Nom : {nom}
+                                  Type : {type}
                                 </Typography>
                                 <Typography
                                   variant="small"
@@ -182,7 +128,33 @@ export default function ActionList() {
                                 color="blue-gray"
                                 className="font-normal opacity-70"
                               >
-                                Etablissement : {etablissement}
+                                {sujet}
+                              </Typography>
+                            </div>
+                          </Link>
+                        </td>
+                        <td className={classes}>
+                          <Link to="/">
+                            <div className="w-max">
+                              <Typography
+                                variant="small"
+                                color="blue-gray"
+                                className="font-normal opacity-70"
+                              >
+                                {contenu}
+                              </Typography>
+                            </div>
+                          </Link>
+                        </td>
+                        <td className={classes}>
+                          <Link to="/">
+                            <div className="w-max">
+                              <Typography
+                                variant="small"
+                                color="blue-gray"
+                                className="font-normal opacity-70"
+                              >
+                                {lien_associe}
                               </Typography>
                             </div>
                           </Link>
@@ -197,30 +169,6 @@ export default function ActionList() {
                               {date_creation}
                             </Typography>
                           </Link>
-                        </td>
-                        <td className={classes}>
-                          <Tooltip content="Modifier">
-                            <EditSection
-                              section={{
-                                nom,
-                                etablissement,
-                                id,
-                              }}
-                              allsection={TABLE_ROWS}
-                              setSection={setTableRows}
-                            />
-                          </Tooltip>
-                        </td>
-                        <td className={classes}>
-                          <Tooltip content="Supprimer">
-                            <ConfirmDelete
-                              nom={nom}
-                              id={id}
-                              deleteElement={deleteSection}
-                            >
-                              Voulez vous supprimer la section {nom}
-                            </ConfirmDelete>
-                          </Tooltip>
                         </td>
                       </tr>
                     );

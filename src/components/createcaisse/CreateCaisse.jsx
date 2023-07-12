@@ -4,7 +4,7 @@ import {
   Input,
   Typography,
   Spinner,
-  Textarea
+  Textarea,
 } from "@material-tailwind/react";
 import {
   ExclamationTriangleIcon,
@@ -22,15 +22,14 @@ import {
 import { useRecoilState, useRecoilValue } from "recoil";
 import { storeToken, storeTokenType } from "../../stores/storeAtoms";
 import Alert from "../alert/Alert";
-import axios from "../../config/axios";
 import { getData, postData } from "../../config/apiFunctions";
+import { storeUserGet } from "../../stores/storeSelector";
 
 export default function CreateCaisse({ setTableRows, allCaisses }) {
   const [montant, setMontant] = useState("");
-  const [emal, setEmail]=useState('')
-  const [nom, setNom] = useState('')
-  const [description, setDescription] = useState('')
-
+  const [nom, setNom] = useState("");
+  const [description, setDescription] = useState("");
+  const [currentUser, setCurrentUser] = useRecoilState(storeUserGet);
 
   const [showAlertSucess, setShowAlertSucess] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -48,12 +47,11 @@ export default function CreateCaisse({ setTableRows, allCaisses }) {
     caisses = [...caisses, { nom: montant, montant }];
 
     if (montant) {
-      postData("/caisse", token, tokenType, 
-      {
-        email_createur: emal,
+      postData("/caisse", token, tokenType, {
+        email_createur: currentUser.adresse_mail,
         nom,
         description,
-        montant_courant: montant
+        montant_courant: montant,
       })
         .then(() => {
           setLoading(false);
@@ -65,13 +63,16 @@ export default function CreateCaisse({ setTableRows, allCaisses }) {
           });
 
           setMontant("");
+          setNom("");
+          setDescription("");
           setShowAlertSucess(true);
 
           setTimeout(() => {
             setShowAlertSucess(false);
           }, 5000);
         })
-        .catch(() => {
+        .catch((err) => {
+          console.log(err);
           setLoading(false);
           setShowAlertDanger(true);
 
@@ -140,17 +141,6 @@ export default function CreateCaisse({ setTableRows, allCaisses }) {
             >
               <div className="mb-4 flex  flex-col gap-6">
                 <Input
-                  onChange={(e) => setEmail(e.target.value)}
-                  value={emal}
-                  type='email'
-                  color="orange"
-                  size="lg"
-                  label="Email"
-                  required
-                />
-              </div>
-              <div className="mb-4 flex  flex-col gap-6">
-                <Input
                   onChange={(e) => setNom(e.target.value)}
                   value={nom}
                   color="orange"
@@ -163,7 +153,7 @@ export default function CreateCaisse({ setTableRows, allCaisses }) {
                 <Input
                   onChange={(e) => setMontant(e.target.value)}
                   value={montant}
-                  type='number'
+                  type="number"
                   color="orange"
                   size="lg"
                   label="Montant"
