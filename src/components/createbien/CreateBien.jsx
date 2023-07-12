@@ -102,7 +102,7 @@ export default function CreateBien({ setTableRows, allBiens }) {
           setTableRows(null);
 
           getData(
-            `/bien/all?limit=1&offset=${allBiens.length}`,
+            `/bien/all?limit=1&offset=${allBiens?.length}`,
             token,
             tokenType
           ).then((res) => {

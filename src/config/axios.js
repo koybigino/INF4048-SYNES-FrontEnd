@@ -21,5 +21,6 @@ axiosInstance.interceptors.response.use(
 );
 
 export default axiosInstance.create({
-  baseURL: "https://synes-backend.onrender.com/",
+  baseURL: "http://127.0.0.1:8000/",
+  // baseURL: "https://synes-backend.onrender.com/",
 });

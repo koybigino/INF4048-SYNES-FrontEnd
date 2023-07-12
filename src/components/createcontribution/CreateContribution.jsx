@@ -202,7 +202,7 @@ export default function CreateContribution({ setTableRows, allSections }) {
               <div className="mb-4 flex  flex-col gap-6">
                 <SelectTailwind
                   options={fondNames}
-                  label="choisir une caisse"
+                  label="choisir un fond"
                   value=""
                   onSelectChange={setCaisse}
                 />
